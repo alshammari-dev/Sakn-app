@@ -1,0 +1,2757 @@
+﻿
+app\Http\Controllers\PermissionController.php:6:use 
+Spatie\Permission\Models\Permission;
+app\Http\Controllers\PermissionController.php:8:class PermissionController 
+extends Controller
+app\Http\Controllers\PermissionController.php:12:        $permissions = 
+Permission::all();
+app\Http\Controllers\PermissionController.php:13:        return 
+view('permission.index', compact('permissions'));
+app\Http\Controllers\PermissionController.php:18:        return 
+view('permission.create');
+app\Http\Controllers\PermissionController.php:24:            'name' => 
+['required', 'string', 'unique:permissions,name'],
+app\Http\Controllers\PermissionController.php:27:        Permission::create([
+app\Http\Controllers\PermissionController.php:31:        return 
+redirect('permissions')->with('status', 'Permission Created Successfully');
+app\Http\Controllers\PermissionController.php:36:        $permission = 
+Permission::findOrFail($id);
+app\Http\Controllers\PermissionController.php:37:        return 
+view('permission.edit', compact('permission'));
+app\Http\Controllers\PermissionController.php:43:            'name' => 
+'required|string|unique:permissions,name',
+app\Http\Controllers\PermissionController.php:46:        $permission = 
+Permission::findOrFail($id);
+app\Http\Controllers\PermissionController.php:47:        $permission->update([
+app\Http\Controllers\PermissionController.php:50:        return 
+redirect('permissions')->with('success', 'Permission updated successfully.');
+app\Http\Controllers\PermissionController.php:53:    public function 
+destroy($permissionId)
+app\Http\Controllers\PermissionController.php:55:        $permission = 
+Permission::find($permissionId);
+app\Http\Controllers\PermissionController.php:56:        $permission->delete();
+app\Http\Controllers\PermissionController.php:57:        return 
+redirect('permissions')->with('success', 'Permission Deleted successfully.');
+app\Http\Controllers\RoleController.php:8:use Spatie\Permission\Models\Role;
+app\Http\Controllers\RoleController.php:9:use 
+Spatie\Permission\Models\Permission;
+app\Http\Controllers\RoleController.php:23:         
+$this->middleware('permission:role-list|role-create|role-edit|role-delete', 
+['only' => ['index','store']]);
+app\Http\Controllers\RoleController.php:24:         
+$this->middleware('permission:role-create', ['only' => ['create','store']]);
+app\Http\Controllers\RoleController.php:25:         
+$this->middleware('permission:role-edit', ['only' => ['edit','update']]);
+app\Http\Controllers\RoleController.php:26:         
+$this->middleware('permission:role-delete', ['only' => ['destroy']]);
+app\Http\Controllers\RoleController.php:48:        $permission = 
+Permission::get();
+app\Http\Controllers\RoleController.php:49:        return 
+view('roles.create',compact('permission'));
+app\Http\Controllers\RoleController.php:62:            'permission' => 
+'required',
+app\Http\Controllers\RoleController.php:65:        $permissionsID = array_map(
+app\Http\Controllers\RoleController.php:67:            
+$request->input('permission')
+app\Http\Controllers\RoleController.php:71:        
+$role->syncPermissions($permissionsID);
+app\Http\Controllers\RoleController.php:85:        $rolePermissions = Permissio
+n::join("role_has_permissions","role_has_permissions.permission_id","=","permis
+sions.id")
+app\Http\Controllers\RoleController.php:86:            
+->where("role_has_permissions.role_id",$id)
+app\Http\Controllers\RoleController.php:89:        return 
+view('roles.show',compact('role','rolePermissions'));
+app\Http\Controllers\RoleController.php:101:        $permission = 
+Permission::get();
+app\Http\Controllers\RoleController.php:102:        $rolePermissions = 
+DB::table("role_has_permissions")->where("role_has_permissions.role_id",$id)
+app\Http\Controllers\RoleController.php:103:            ->pluck('role_has_permi
+ssions.permission_id','role_has_permissions.permission_id')
+app\Http\Controllers\RoleController.php:106:        return 
+view('roles.edit',compact('role','permission','rolePermissions'));
+app\Http\Controllers\RoleController.php:120:            'permission' => 
+'required',
+app\Http\Controllers\RoleController.php:127:        $permissionsID = array_map(
+app\Http\Controllers\RoleController.php:129:            
+$request->input('permission')
+app\Http\Controllers\RoleController.php:132:        
+$role->syncPermissions($permissionsID);
+app\Http\Controllers\UserController.php:8:use Spatie\Permission\Models\Role;
+app\Models\User.php:12:use Spatie\Permission\Traits\HasRoles;
+bootstrap\cache\packages.php:83:  'spatie/laravel-permission' => 
+bootstrap\cache\packages.php:87:      0 => 
+'Spatie\\Permission\\PermissionServiceProvider',
+bootstrap\cache\services.php:38:    34 => 
+'Spatie\\Permission\\PermissionServiceProvider',
+bootstrap\cache\services.php:62:    19 => 
+'Spatie\\Permission\\PermissionServiceProvider',
+config\permission.php:8:         * When using the "HasPermissions" trait from 
+this package, we need to know which
+config\permission.php:9:         * Eloquent model should be used to retrieve 
+your permissions. Of course, it
+config\permission.php:10:         * is often just the "Permission" model but 
+you may use whatever you like.
+config\permission.php:12:         * The model you want to use as a Permission 
+model needs to implement the
+config\permission.php:13:         * `Spatie\Permission\Contracts\Permission` 
+contract.
+config\permission.php:16:        'permission' => 
+Spatie\Permission\Models\Permission::class,
+config\permission.php:24:         * `Spatie\Permission\Contracts\Role` 
+contract.
+config\permission.php:27:        'role' => 
+Spatie\Permission\Models\Role::class,
+config\permission.php:42:         * When using the "HasPermissions" trait from 
+this package, we need to know which
+config\permission.php:43:         * table should be used to retrieve your 
+permissions. We have chosen a basic
+config\permission.php:47:        'permissions' => 'permissions',
+config\permission.php:50:         * When using the "HasPermissions" trait from 
+this package, we need to know which
+config\permission.php:51:         * table should be used to retrieve your 
+models permissions. We have chosen a
+config\permission.php:55:        'model_has_permissions' => 
+'model_has_permissions',
+config\permission.php:67:         * table should be used to retrieve your 
+roles permissions. We have chosen a
+config\permission.php:71:        'role_has_permissions' => 
+'role_has_permissions',
+config\permission.php:79:        'permission_pivot_key' => null, // default 
+'permission_id',
+config\permission.php:100:     * When set to true, the method for checking 
+permissions will be registered on the gate.
+config\permission.php:101:     * Set this to false if you want to implement 
+custom logic for checking permissions.
+config\permission.php:104:    'register_permission_check_method' => true,
+config\permission.php:108:     * this will refresh permissions on every 
+TickTerminated, TaskTerminated and RequestTerminated
+config\permission.php:114:     * Events will fire when a role or permission is 
+assigned/unassigned:
+config\permission.php:115:     * \Spatie\Permission\Events\RoleAttachedEvent
+config\permission.php:116:     * \Spatie\Permission\Events\RoleDetachedEvent
+config\permission.php:117:     * 
+\Spatie\Permission\Events\PermissionAttachedEvent
+config\permission.php:118:     * 
+\Spatie\Permission\Events\PermissionDetachedEvent
+config\permission.php:130:     * add 'team_foreign_key' to 'roles', 
+'model_has_roles', and 'model_has_permissions'
+config\permission.php:137:     * The class to use to resolve the permissions 
+team id
+config\permission.php:139:    'team_resolver' => 
+\Spatie\Permission\DefaultTeamResolver::class,
+config\permission.php:143:     * When set to true the package will use 
+Passports Client to check permissions
+config\permission.php:149:     * When set to true, the required permission 
+names are added to exception messages.
+config\permission.php:154:    'display_permission_in_exception' => false,
+config\permission.php:165:     * By default wildcard permission lookups are 
+disabled.
+config\permission.php:169:    'enable_wildcard_permission' => false,
+config\permission.php:172:     * The class to use for interpreting wildcard 
+permissions.
+config\permission.php:175:    // 'wildcard_permission' => 
+Spatie\Permission\WildcardPermission::class,
+config\permission.php:182:         * By default all permissions are cached for 
+24 hours to speed up performance.
+config\permission.php:183:         * When permissions or roles are updated the 
+cache is flushed automatically.
+config\permission.php:189:         * The cache key used to store all 
+permissions.
+config\permission.php:192:        'key' => 'spatie.permission.cache',
+config\permission.php:195:         * You may optionally indicate a specific 
+cache driver to use for permission and
+database\migrations\2026_04_26_151750_create_permission_tables.php:14:        
+$teams = config('permission.teams');
+database\migrations\2026_04_26_151750_create_permission_tables.php:15:        
+$tableNames = config('permission.table_names');
+database\migrations\2026_04_26_151750_create_permission_tables.php:16:        
+$columnNames = config('permission.column_names');
+database\migrations\2026_04_26_151750_create_permission_tables.php:18:        
+$pivotPermission = $columnNames['permission_pivot_key'] ?? 'permission_id';
+database\migrations\2026_04_26_151750_create_permission_tables.php:20:        
+throw_if(empty($tableNames), 'Error: config/permission.php not loaded. Run 
+[php artisan config:clear] and try again.');
+database\migrations\2026_04_26_151750_create_permission_tables.php:21:        
+throw_if($teams && empty($columnNames['team_foreign_key'] ?? null), 'Error: 
+team_foreign_key on config/permission.php not loaded. Run [php artisan 
+config:clear] and try again.');
+database\migrations\2026_04_26_151750_create_permission_tables.php:26:        
+Schema::create($tableNames['permissions'], static function (Blueprint $table) {
+database\migrations\2026_04_26_151750_create_permission_tables.php:27:         
+   $table->id(); // permission id
+database\migrations\2026_04_26_151750_create_permission_tables.php:40:         
+   if ($teams || config('permission.testing')) { // permission.testing is a 
+fix for sqlite testing
+database\migrations\2026_04_26_151750_create_permission_tables.php:47:         
+   if ($teams || config('permission.testing')) {
+database\migrations\2026_04_26_151750_create_permission_tables.php:54:        
+Schema::create($tableNames['model_has_permissions'], static function 
+(Blueprint $table) use ($tableNames, $columnNames, $pivotPermission, $teams) {
+database\migrations\2026_04_26_151750_create_permission_tables.php:55:         
+   $table->unsignedBigInteger($pivotPermission);
+database\migrations\2026_04_26_151750_create_permission_tables.php:59:         
+   $table->index([$columnNames['model_morph_key'], 'model_type'], 
+'model_has_permissions_model_id_model_type_index');
+database\migrations\2026_04_26_151750_create_permission_tables.php:61:         
+   $table->foreign($pivotPermission)
+database\migrations\2026_04_26_151750_create_permission_tables.php:62:         
+       ->references('id') // permission id
+database\migrations\2026_04_26_151750_create_permission_tables.php:63:         
+       ->on($tableNames['permissions'])
+database\migrations\2026_04_26_151750_create_permission_tables.php:67:         
+       $table->index($columnNames['team_foreign_key'], 
+'model_has_permissions_team_foreign_key_index');
+database\migrations\2026_04_26_151750_create_permission_tables.php:69:         
+       $table->primary([$columnNames['team_foreign_key'], $pivotPermission, 
+$columnNames['model_morph_key'], 'model_type'],
+database\migrations\2026_04_26_151750_create_permission_tables.php:70:         
+           'model_has_permissions_permission_model_type_primary');
+database\migrations\2026_04_26_151750_create_permission_tables.php:72:         
+       $table->primary([$pivotPermission, $columnNames['model_morph_key'], 
+'model_type'],
+database\migrations\2026_04_26_151750_create_permission_tables.php:73:         
+           'model_has_permissions_permission_model_type_primary');
+database\migrations\2026_04_26_151750_create_permission_tables.php:100:        
+Schema::create($tableNames['role_has_permissions'], static function (Blueprint 
+$table) use ($tableNames, $pivotRole, $pivotPermission) {
+database\migrations\2026_04_26_151750_create_permission_tables.php:101:        
+    $table->unsignedBigInteger($pivotPermission);
+database\migrations\2026_04_26_151750_create_permission_tables.php:104:        
+    $table->foreign($pivotPermission)
+database\migrations\2026_04_26_151750_create_permission_tables.php:105:        
+        ->references('id') // permission id
+database\migrations\2026_04_26_151750_create_permission_tables.php:106:        
+        ->on($tableNames['permissions'])
+database\migrations\2026_04_26_151750_create_permission_tables.php:114:        
+    $table->primary([$pivotPermission, $pivotRole], 
+'role_has_permissions_permission_id_role_id_primary');
+database\migrations\2026_04_26_151750_create_permission_tables.php:118:        
+    ->store(config('permission.cache.store') != 'default' ? 
+config('permission.cache.store') : null)
+database\migrations\2026_04_26_151750_create_permission_tables.php:119:        
+    ->forget(config('permission.cache.key'));
+database\migrations\2026_04_26_151750_create_permission_tables.php:127:        
+$tableNames = config('permission.table_names');
+database\migrations\2026_04_26_151750_create_permission_tables.php:129:        
+throw_if(empty($tableNames), 'Error: config/permission.php not found and 
+defaults could not be merged. Please publish the package configuration before 
+proceeding, or drop the tables manually.');
+database\migrations\2026_04_26_151750_create_permission_tables.php:131:        
+Schema::dropIfExists($tableNames['role_has_permissions']);
+database\migrations\2026_04_26_151750_create_permission_tables.php:133:        
+Schema::dropIfExists($tableNames['model_has_permissions']);
+database\migrations\2026_04_26_151750_create_permission_tables.php:135:        
+Schema::dropIfExists($tableNames['permissions']);
+database\seeders\PermissionTableSeeder.php:7:use 
+Spatie\Permission\Models\Permission;
+database\seeders\PermissionTableSeeder.php:9:class PermissionTableSeeder 
+extends Seeder
+database\seeders\PermissionTableSeeder.php:16:        $permissions = [
+database\seeders\PermissionTableSeeder.php:23:        foreach ($permissions as 
+$permission) {
+database\seeders\PermissionTableSeeder.php:24:             
+Permission::create(['name' => $permission]);
+database\seeders\RolesAndUsersSeeder.php:7:use Spatie\Permission\Models\Role;
+database\seeders\RolesAndUsersSeeder.php:14:        app()[\Spatie\Permission\Pe
+rmissionRegistrar::class]->forgetCachedPermissions();
+resources\views\layouts\dashborad.blade.php:124:                <a 
+class="nav-link collapsed" href="{{ route('permissions.index') }}">
+resources\views\layouts\dashborad.blade.php:126:                    
+<span>Permissions</span>
+resources\views\permission\create.blade.php:8:    <title>permissions</title>
+resources\views\permission\create.blade.php:20:                        
+<h4>Create Permissions
+resources\views\permission\create.blade.php:21:                            <a 
+href="{{ url('permissions') }}" class="btn btn-danger float-right">
+resources\views\permission\create.blade.php:26:                        <form 
+action="{{ url('permissions') }}" method="POST">
+resources\views\permission\create.blade.php:29:                                
+<label for="">Permission Name</label>
+resources\views\permission\edit.blade.php:8:    <title>Edit Permission</title>
+resources\views\permission\edit.blade.php:20:                        <h4>Edit 
+Permission
+resources\views\permission\edit.blade.php:21:                            <a 
+href="{{ url('permissions') }}" class="btn btn-danger float-right">Back</a>
+resources\views\permission\edit.blade.php:25:                        <form 
+action="{{ url('permissions/' . $permission->id) }}" method="POST">
+resources\views\permission\edit.blade.php:29:                                
+<label for="">Permission Name</label>
+resources\views\permission\edit.blade.php:31:                                  
+  value="{{ $permission->name }}" required>
+resources\views\permission\index.blade.php:15:                        
+<h4>Permissions
+resources\views\permission\index.blade.php:16:                            <a 
+href="{{ url('permissions/create') }}" class="btn btn-success float-right">Add
+resources\views\permission\index.blade.php:17:                                
+Permission</a>
+resources\views\permission\index.blade.php:30:                                
+@foreach ($permissions as $permission)
+resources\views\permission\index.blade.php:32:                                 
+       <td>{{ $permission->id }}</td>
+resources\views\permission\index.blade.php:33:                                 
+       <td>{{ $permission->name }}</td>
+resources\views\permission\index.blade.php:36:                                 
+               href="{{ url('permissions/' . $permission->id . '/edit') 
+}}"class="btn btn-primary">Edit</a>
+resources\views\permission\index.blade.php:38:                                 
+               href="{{ url('permissions/' . $permission->id . '/delete') 
+}}"class="btn btn-danger">Delete</a>
+resources\views\roles\create.blade.php:37:                
+<strong>Permission:</strong>
+resources\views\roles\create.blade.php:39:                @foreach($permission 
+as $value)
+resources\views\roles\create.blade.php:40:                    <label><input 
+type="checkbox" name="permission[{{$value->id}}]" value="{{$value->id}}" 
+class="name">
+resources\views\roles\edit.blade.php:39:                
+<strong>Permission:</strong>
+resources\views\roles\edit.blade.php:41:                @foreach($permission 
+as $value)
+resources\views\roles\edit.blade.php:42:                    <label><input 
+type="checkbox" name="permission[{{$value->id}}]" value="{{$value->id}}" 
+class="name" {{ in_array($value->id, $rolePermissions) ? 'checked' : ''}}>
+resources\views\roles\show.blade.php:24:            
+<strong>Permissions:</strong>
+resources\views\roles\show.blade.php:25:            
+@if(!empty($rolePermissions))
+resources\views\roles\show.blade.php:26:                
+@foreach($rolePermissions as $v)
+routes\web.php:7:use App\Http\Controllers\PermissionController;
+routes\web.php:24:    Route::resource('permissions', 
+PermissionController::class);
+storage\framework\views\5d3e0cc01bfef3af5af466912fefdcbc.php:15:               
+         <h4>Permissions
+storage\framework\views\5d3e0cc01bfef3af5af466912fefdcbc.php:16:               
+             <a href="<?php echo e(url('permissions/create')); ?>" class="btn 
+btn-success float-right">Add
+storage\framework\views\5d3e0cc01bfef3af5af466912fefdcbc.php:17:               
+                 Permission</a>
+storage\framework\views\5d3e0cc01bfef3af5af466912fefdcbc.php:30:               
+                 <?php $__currentLoopData = $permissions; 
+$__env->addLoop($__currentLoopData); foreach($__currentLoopData as 
+$permission): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+storage\framework\views\5d3e0cc01bfef3af5af466912fefdcbc.php:32:               
+                         <td><?php echo e($permission->id); ?></td>
+storage\framework\views\5d3e0cc01bfef3af5af466912fefdcbc.php:33:               
+                         <td><?php echo e($permission->name); ?></td>
+storage\framework\views\5d3e0cc01bfef3af5af466912fefdcbc.php:36:               
+                                 href="<?php echo e(url('permissions/' . 
+$permission->id . '/edit')); ?>"class="btn btn-primary">Edit</a>
+storage\framework\views\5d3e0cc01bfef3af5af466912fefdcbc.php:38:               
+                                 href="<?php echo e(url('permissions/' . 
+$permission->id . '/delete')); ?>"class="btn btn-danger">Delete</a>
+storage\framework\views\5d3e0cc01bfef3af5af466912fefdcbc.php:51:<?php echo 
+$__env->make('layouts.dashborad', array_diff_key(get_defined_vars(), ['__data' 
+=> 1, '__path' => 1]))->render(); ?><?php /**PATH 
+C:\Users\Sham\Sakn-app\resources\views/permission/index.blade.php ENDPATH**/ ?>
+storage\framework\views\80408ba011d788342b3b9725a792f5d8.php:124:              
+  <a class="nav-link collapsed" href="<?php echo 
+e(route('permissions.index')); ?>">
+storage\framework\views\80408ba011d788342b3b9725a792f5d8.php:126:              
+      <span>Permissions</span>
+vendor\composer\autoload_classmap.php:2786:    
+'Laravel\\Mcp\\Server\\Ui\\Enums\\Permission' => $vendorDir . 
+'/laravel/mcp/src/Server/Ui/Enums/Permission.php',
+vendor\composer\autoload_classmap.php:2788:    
+'Laravel\\Mcp\\Server\\Ui\\Permissions' => $vendorDir . 
+'/laravel/mcp/src/Server/Ui/Permissions.php',
+vendor\composer\autoload_classmap.php:6472:    
+'Spatie\\Permission\\Commands\\AssignRoleCommand' => $vendorDir . 
+'/spatie/laravel-permission/src/Commands/AssignRoleCommand.php',
+vendor\composer\autoload_classmap.php:6473:    
+'Spatie\\Permission\\Commands\\CacheResetCommand' => $vendorDir . 
+'/spatie/laravel-permission/src/Commands/CacheResetCommand.php',
+vendor\composer\autoload_classmap.php:6474:    
+'Spatie\\Permission\\Commands\\CreatePermissionCommand' => $vendorDir . 
+'/spatie/laravel-permission/src/Commands/CreatePermissionCommand.php',
+vendor\composer\autoload_classmap.php:6475:    
+'Spatie\\Permission\\Commands\\CreateRoleCommand' => $vendorDir . 
+'/spatie/laravel-permission/src/Commands/CreateRoleCommand.php',
+vendor\composer\autoload_classmap.php:6476:    
+'Spatie\\Permission\\Commands\\ShowCommand' => $vendorDir . 
+'/spatie/laravel-permission/src/Commands/ShowCommand.php',
+vendor\composer\autoload_classmap.php:6477:    
+'Spatie\\Permission\\Commands\\UpgradeForTeamsCommand' => $vendorDir . 
+'/spatie/laravel-permission/src/Commands/UpgradeForTeamsCommand.php',
+vendor\composer\autoload_classmap.php:6478:    
+'Spatie\\Permission\\Contracts\\Permission' => $vendorDir . 
+'/spatie/laravel-permission/src/Contracts/Permission.php',
+vendor\composer\autoload_classmap.php:6479:    
+'Spatie\\Permission\\Contracts\\PermissionsTeamResolver' => $vendorDir . 
+'/spatie/laravel-permission/src/Contracts/PermissionsTeamResolver.php',
+vendor\composer\autoload_classmap.php:6480:    
+'Spatie\\Permission\\Contracts\\Role' => $vendorDir . 
+'/spatie/laravel-permission/src/Contracts/Role.php',
+vendor\composer\autoload_classmap.php:6481:    
+'Spatie\\Permission\\Contracts\\Wildcard' => $vendorDir . 
+'/spatie/laravel-permission/src/Contracts/Wildcard.php',
+vendor\composer\autoload_classmap.php:6482:    
+'Spatie\\Permission\\DefaultTeamResolver' => $vendorDir . 
+'/spatie/laravel-permission/src/DefaultTeamResolver.php',
+vendor\composer\autoload_classmap.php:6483:    
+'Spatie\\Permission\\Events\\PermissionAttachedEvent' => $vendorDir . 
+'/spatie/laravel-permission/src/Events/PermissionAttachedEvent.php',
+vendor\composer\autoload_classmap.php:6484:    
+'Spatie\\Permission\\Events\\PermissionDetachedEvent' => $vendorDir . 
+'/spatie/laravel-permission/src/Events/PermissionDetachedEvent.php',
+vendor\composer\autoload_classmap.php:6485:    
+'Spatie\\Permission\\Events\\RoleAttachedEvent' => $vendorDir . 
+'/spatie/laravel-permission/src/Events/RoleAttachedEvent.php',
+vendor\composer\autoload_classmap.php:6486:    
+'Spatie\\Permission\\Events\\RoleDetachedEvent' => $vendorDir . 
+'/spatie/laravel-permission/src/Events/RoleDetachedEvent.php',
+vendor\composer\autoload_classmap.php:6487:    
+'Spatie\\Permission\\Exceptions\\GuardDoesNotMatch' => $vendorDir . 
+'/spatie/laravel-permission/src/Exceptions/GuardDoesNotMatch.php',
+vendor\composer\autoload_classmap.php:6488:    
+'Spatie\\Permission\\Exceptions\\PermissionAlreadyExists' => $vendorDir . 
+'/spatie/laravel-permission/src/Exceptions/PermissionAlreadyExists.php',
+vendor\composer\autoload_classmap.php:6489:    
+'Spatie\\Permission\\Exceptions\\PermissionDoesNotExist' => $vendorDir . 
+'/spatie/laravel-permission/src/Exceptions/PermissionDoesNotExist.php',
+vendor\composer\autoload_classmap.php:6490:    
+'Spatie\\Permission\\Exceptions\\RoleAlreadyExists' => $vendorDir . 
+'/spatie/laravel-permission/src/Exceptions/RoleAlreadyExists.php',
+vendor\composer\autoload_classmap.php:6491:    
+'Spatie\\Permission\\Exceptions\\RoleDoesNotExist' => $vendorDir . 
+'/spatie/laravel-permission/src/Exceptions/RoleDoesNotExist.php',
+vendor\composer\autoload_classmap.php:6492:    
+'Spatie\\Permission\\Exceptions\\UnauthorizedException' => $vendorDir . 
+'/spatie/laravel-permission/src/Exceptions/UnauthorizedException.php',
+vendor\composer\autoload_classmap.php:6493:    
+'Spatie\\Permission\\Exceptions\\WildcardPermissionInvalidArgument' => 
+$vendorDir . '/spatie/laravel-permission/src/Exceptions/WildcardPermissionInval
+idArgument.php',
+vendor\composer\autoload_classmap.php:6494:    
+'Spatie\\Permission\\Exceptions\\WildcardPermissionNotImplementsContract' => 
+$vendorDir . '/spatie/laravel-permission/src/Exceptions/WildcardPermissionNotIm
+plementsContract.php',
+vendor\composer\autoload_classmap.php:6495:    
+'Spatie\\Permission\\Exceptions\\WildcardPermissionNotProperlyFormatted' => 
+$vendorDir . '/spatie/laravel-permission/src/Exceptions/WildcardPermissionNotPr
+operlyFormatted.php',
+vendor\composer\autoload_classmap.php:6496:    'Spatie\\Permission\\Guard' => 
+$vendorDir . '/spatie/laravel-permission/src/Guard.php',
+vendor\composer\autoload_classmap.php:6497:    
+'Spatie\\Permission\\Middleware\\PermissionMiddleware' => $vendorDir . 
+'/spatie/laravel-permission/src/Middleware/PermissionMiddleware.php',
+vendor\composer\autoload_classmap.php:6498:    
+'Spatie\\Permission\\Middleware\\RoleMiddleware' => $vendorDir . 
+'/spatie/laravel-permission/src/Middleware/RoleMiddleware.php',
+vendor\composer\autoload_classmap.php:6499:    
+'Spatie\\Permission\\Middleware\\RoleOrPermissionMiddleware' => $vendorDir . 
+'/spatie/laravel-permission/src/Middleware/RoleOrPermissionMiddleware.php',
+vendor\composer\autoload_classmap.php:6500:    
+'Spatie\\Permission\\Models\\Permission' => $vendorDir . 
+'/spatie/laravel-permission/src/Models/Permission.php',
+vendor\composer\autoload_classmap.php:6501:    
+'Spatie\\Permission\\Models\\Role' => $vendorDir . 
+'/spatie/laravel-permission/src/Models/Role.php',
+vendor\composer\autoload_classmap.php:6502:    
+'Spatie\\Permission\\PermissionRegistrar' => $vendorDir . 
+'/spatie/laravel-permission/src/PermissionRegistrar.php',
+vendor\composer\autoload_classmap.php:6503:    
+'Spatie\\Permission\\PermissionServiceProvider' => $vendorDir . 
+'/spatie/laravel-permission/src/PermissionServiceProvider.php',
+vendor\composer\autoload_classmap.php:6504:    
+'Spatie\\Permission\\Traits\\HasPermissions' => $vendorDir . 
+'/spatie/laravel-permission/src/Traits/HasPermissions.php',
+vendor\composer\autoload_classmap.php:6505:    
+'Spatie\\Permission\\Traits\\HasRoles' => $vendorDir . 
+'/spatie/laravel-permission/src/Traits/HasRoles.php',
+vendor\composer\autoload_classmap.php:6506:    
+'Spatie\\Permission\\Traits\\RefreshesPermissionCache' => $vendorDir . 
+'/spatie/laravel-permission/src/Traits/RefreshesPermissionCache.php',
+vendor\composer\autoload_classmap.php:6507:    
+'Spatie\\Permission\\WildcardPermission' => $vendorDir . 
+'/spatie/laravel-permission/src/WildcardPermission.php',
+vendor\composer\autoload_files.php:48:    '377b22b161c09ed6e5152de788ca020a' 
+=> $vendorDir . '/spatie/laravel-permission/src/helpers.php',
+vendor\composer\autoload_psr4.php:46:    'Spatie\\Permission\\' => 
+array($vendorDir . '/spatie/laravel-permission/src'),
+vendor\composer\autoload_static.php:49:        
+'377b22b161c09ed6e5152de788ca020a' => __DIR__ . '/..' . 
+'/spatie/laravel-permission/src/helpers.php',
+vendor\composer\autoload_static.php:104:            'Spatie\\Permission\\' => 
+18,
+vendor\composer\autoload_static.php:369:        'Spatie\\Permission\\' =>
+vendor\composer\autoload_static.php:371:            0 => __DIR__ . '/..' . 
+'/spatie/laravel-permission/src',
+vendor\composer\autoload_static.php:3434:        
+'Laravel\\Mcp\\Server\\Ui\\Enums\\Permission' => __DIR__ . '/..' . 
+'/laravel/mcp/src/Server/Ui/Enums/Permission.php',
+vendor\composer\autoload_static.php:3436:        
+'Laravel\\Mcp\\Server\\Ui\\Permissions' => __DIR__ . '/..' . 
+'/laravel/mcp/src/Server/Ui/Permissions.php',
+vendor\composer\autoload_static.php:7120:        
+'Spatie\\Permission\\Commands\\AssignRoleCommand' => __DIR__ . '/..' . 
+'/spatie/laravel-permission/src/Commands/AssignRoleCommand.php',
+vendor\composer\autoload_static.php:7121:        
+'Spatie\\Permission\\Commands\\CacheResetCommand' => __DIR__ . '/..' . 
+'/spatie/laravel-permission/src/Commands/CacheResetCommand.php',
+vendor\composer\autoload_static.php:7122:        
+'Spatie\\Permission\\Commands\\CreatePermissionCommand' => __DIR__ . '/..' . 
+'/spatie/laravel-permission/src/Commands/CreatePermissionCommand.php',
+vendor\composer\autoload_static.php:7123:        
+'Spatie\\Permission\\Commands\\CreateRoleCommand' => __DIR__ . '/..' . 
+'/spatie/laravel-permission/src/Commands/CreateRoleCommand.php',
+vendor\composer\autoload_static.php:7124:        
+'Spatie\\Permission\\Commands\\ShowCommand' => __DIR__ . '/..' . 
+'/spatie/laravel-permission/src/Commands/ShowCommand.php',
+vendor\composer\autoload_static.php:7125:        
+'Spatie\\Permission\\Commands\\UpgradeForTeamsCommand' => __DIR__ . '/..' . 
+'/spatie/laravel-permission/src/Commands/UpgradeForTeamsCommand.php',
+vendor\composer\autoload_static.php:7126:        
+'Spatie\\Permission\\Contracts\\Permission' => __DIR__ . '/..' . 
+'/spatie/laravel-permission/src/Contracts/Permission.php',
+vendor\composer\autoload_static.php:7127:        
+'Spatie\\Permission\\Contracts\\PermissionsTeamResolver' => __DIR__ . '/..' . 
+'/spatie/laravel-permission/src/Contracts/PermissionsTeamResolver.php',
+vendor\composer\autoload_static.php:7128:        
+'Spatie\\Permission\\Contracts\\Role' => __DIR__ . '/..' . 
+'/spatie/laravel-permission/src/Contracts/Role.php',
+vendor\composer\autoload_static.php:7129:        
+'Spatie\\Permission\\Contracts\\Wildcard' => __DIR__ . '/..' . 
+'/spatie/laravel-permission/src/Contracts/Wildcard.php',
+vendor\composer\autoload_static.php:7130:        
+'Spatie\\Permission\\DefaultTeamResolver' => __DIR__ . '/..' . 
+'/spatie/laravel-permission/src/DefaultTeamResolver.php',
+vendor\composer\autoload_static.php:7131:        
+'Spatie\\Permission\\Events\\PermissionAttachedEvent' => __DIR__ . '/..' . 
+'/spatie/laravel-permission/src/Events/PermissionAttachedEvent.php',
+vendor\composer\autoload_static.php:7132:        
+'Spatie\\Permission\\Events\\PermissionDetachedEvent' => __DIR__ . '/..' . 
+'/spatie/laravel-permission/src/Events/PermissionDetachedEvent.php',
+vendor\composer\autoload_static.php:7133:        
+'Spatie\\Permission\\Events\\RoleAttachedEvent' => __DIR__ . '/..' . 
+'/spatie/laravel-permission/src/Events/RoleAttachedEvent.php',
+vendor\composer\autoload_static.php:7134:        
+'Spatie\\Permission\\Events\\RoleDetachedEvent' => __DIR__ . '/..' . 
+'/spatie/laravel-permission/src/Events/RoleDetachedEvent.php',
+vendor\composer\autoload_static.php:7135:        
+'Spatie\\Permission\\Exceptions\\GuardDoesNotMatch' => __DIR__ . '/..' . 
+'/spatie/laravel-permission/src/Exceptions/GuardDoesNotMatch.php',
+vendor\composer\autoload_static.php:7136:        
+'Spatie\\Permission\\Exceptions\\PermissionAlreadyExists' => __DIR__ . '/..' . 
+'/spatie/laravel-permission/src/Exceptions/PermissionAlreadyExists.php',
+vendor\composer\autoload_static.php:7137:        
+'Spatie\\Permission\\Exceptions\\PermissionDoesNotExist' => __DIR__ . '/..' . 
+'/spatie/laravel-permission/src/Exceptions/PermissionDoesNotExist.php',
+vendor\composer\autoload_static.php:7138:        
+'Spatie\\Permission\\Exceptions\\RoleAlreadyExists' => __DIR__ . '/..' . 
+'/spatie/laravel-permission/src/Exceptions/RoleAlreadyExists.php',
+vendor\composer\autoload_static.php:7139:        
+'Spatie\\Permission\\Exceptions\\RoleDoesNotExist' => __DIR__ . '/..' . 
+'/spatie/laravel-permission/src/Exceptions/RoleDoesNotExist.php',
+vendor\composer\autoload_static.php:7140:        
+'Spatie\\Permission\\Exceptions\\UnauthorizedException' => __DIR__ . '/..' . 
+'/spatie/laravel-permission/src/Exceptions/UnauthorizedException.php',
+vendor\composer\autoload_static.php:7141:        
+'Spatie\\Permission\\Exceptions\\WildcardPermissionInvalidArgument' => __DIR__ 
+. '/..' . '/spatie/laravel-permission/src/Exceptions/WildcardPermissionInvalidA
+rgument.php',
+vendor\composer\autoload_static.php:7142:        
+'Spatie\\Permission\\Exceptions\\WildcardPermissionNotImplementsContract' => 
+__DIR__ . '/..' . '/spatie/laravel-permission/src/Exceptions/WildcardPermission
+NotImplementsContract.php',
+vendor\composer\autoload_static.php:7143:        
+'Spatie\\Permission\\Exceptions\\WildcardPermissionNotProperlyFormatted' => 
+__DIR__ . '/..' . '/spatie/laravel-permission/src/Exceptions/WildcardPermission
+NotProperlyFormatted.php',
+vendor\composer\autoload_static.php:7144:        'Spatie\\Permission\\Guard' 
+=> __DIR__ . '/..' . '/spatie/laravel-permission/src/Guard.php',
+vendor\composer\autoload_static.php:7145:        
+'Spatie\\Permission\\Middleware\\PermissionMiddleware' => __DIR__ . '/..' . 
+'/spatie/laravel-permission/src/Middleware/PermissionMiddleware.php',
+vendor\composer\autoload_static.php:7146:        
+'Spatie\\Permission\\Middleware\\RoleMiddleware' => __DIR__ . '/..' . 
+'/spatie/laravel-permission/src/Middleware/RoleMiddleware.php',
+vendor\composer\autoload_static.php:7147:        
+'Spatie\\Permission\\Middleware\\RoleOrPermissionMiddleware' => __DIR__ . 
+'/..' . 
+'/spatie/laravel-permission/src/Middleware/RoleOrPermissionMiddleware.php',
+vendor\composer\autoload_static.php:7148:        
+'Spatie\\Permission\\Models\\Permission' => __DIR__ . '/..' . 
+'/spatie/laravel-permission/src/Models/Permission.php',
+vendor\composer\autoload_static.php:7149:        
+'Spatie\\Permission\\Models\\Role' => __DIR__ . '/..' . 
+'/spatie/laravel-permission/src/Models/Role.php',
+vendor\composer\autoload_static.php:7150:        
+'Spatie\\Permission\\PermissionRegistrar' => __DIR__ . '/..' . 
+'/spatie/laravel-permission/src/PermissionRegistrar.php',
+vendor\composer\autoload_static.php:7151:        
+'Spatie\\Permission\\PermissionServiceProvider' => __DIR__ . '/..' . 
+'/spatie/laravel-permission/src/PermissionServiceProvider.php',
+vendor\composer\autoload_static.php:7152:        
+'Spatie\\Permission\\Traits\\HasPermissions' => __DIR__ . '/..' . 
+'/spatie/laravel-permission/src/Traits/HasPermissions.php',
+vendor\composer\autoload_static.php:7153:        
+'Spatie\\Permission\\Traits\\HasRoles' => __DIR__ . '/..' . 
+'/spatie/laravel-permission/src/Traits/HasRoles.php',
+vendor\composer\autoload_static.php:7154:        
+'Spatie\\Permission\\Traits\\RefreshesPermissionCache' => __DIR__ . '/..' . 
+'/spatie/laravel-permission/src/Traits/RefreshesPermissionCache.php',
+vendor\composer\autoload_static.php:7155:        
+'Spatie\\Permission\\WildcardPermission' => __DIR__ . '/..' . 
+'/spatie/laravel-permission/src/WildcardPermission.php',
+vendor\composer\installed.php:1146:        'spatie/laravel-permission' => 
+array(
+vendor\composer\installed.php:1151:            'install_path' => __DIR__ . 
+'/../spatie/laravel-permission',
+vendor\fakerphp\faker\src\Faker\Provider\de_CH\Text.php:1700:    permission 
+and without paying copyright royalties.  Special rules,
+vendor\fakerphp\faker\src\Faker\Provider\de_CH\Text.php:1705:    charge for 
+the eBooks, unless you receive specific permission.  If you
+vendor\fakerphp\faker\src\Faker\Provider\de_CH\Text.php:1792:    posted with 
+permission of the copyright holder), the work can be copied
+vendor\fakerphp\faker\src\Faker\Provider\de_CH\Text.php:1797:    through 1.E.7 
+or obtain permission for the use of the work and the
+vendor\fakerphp\faker\src\Faker\Provider\de_CH\Text.php:1802:    with the 
+permission of the copyright holder, your use and distribution
+vendor\fakerphp\faker\src\Faker\Provider\de_CH\Text.php:1806:    permission of 
+the copyright holder found at the beginning of this work.
+vendor\fakerphp\faker\src\Faker\Provider\de_CH\Text.php:1869:    forth in this 
+agreement, you must obtain permission in writing from
+vendor\fakerphp\faker\src\Faker\Provider\de_DE\Text.php:1700:    permission 
+and without paying copyright royalties.  Special rules,
+vendor\fakerphp\faker\src\Faker\Provider\de_DE\Text.php:1705:    charge for 
+the eBooks, unless you receive specific permission.  If you
+vendor\fakerphp\faker\src\Faker\Provider\de_DE\Text.php:1792:    posted with 
+permission of the copyright holder), the work can be copied
+vendor\fakerphp\faker\src\Faker\Provider\de_DE\Text.php:1797:    through 1.E.7 
+or obtain permission for the use of the work and the
+vendor\fakerphp\faker\src\Faker\Provider\de_DE\Text.php:1802:    with the 
+permission of the copyright holder, your use and distribution
+vendor\fakerphp\faker\src\Faker\Provider\de_DE\Text.php:1806:    permission of 
+the copyright holder found at the beginning of this work.
+vendor\fakerphp\faker\src\Faker\Provider\de_DE\Text.php:1869:    forth in this 
+agreement, you must obtain permission in writing from
+vendor\fakerphp\faker\src\Faker\Provider\el_GR\Text.php:2348:    has received 
+express permission from the Licensor to exercise rights
+vendor\fakerphp\faker\src\Faker\Provider\el_GR\Text.php:2481:    written 
+permission of the Original Author, Licensor and/or Attribution
+vendor\fakerphp\faker\src\Faker\Provider\en_US\Text.php:3383:    permission 
+and without paying copyright royalties.  Special rules,
+vendor\fakerphp\faker\src\Faker\Provider\en_US\Text.php:3388:    charge for 
+the eBooks, unless you receive specific permission.  If you
+vendor\fakerphp\faker\src\Faker\Provider\en_US\Text.php:3475:    posted with 
+permission of the copyright holder), the work can be copied
+vendor\fakerphp\faker\src\Faker\Provider\en_US\Text.php:3480:    through 1.E.7 
+or obtain permission for the use of the work and the
+vendor\fakerphp\faker\src\Faker\Provider\en_US\Text.php:3485:    with the 
+permission of the copyright holder, your use and distribution
+vendor\fakerphp\faker\src\Faker\Provider\en_US\Text.php:3489:    permission of 
+the copyright holder found at the beginning of this work.
+vendor\fakerphp\faker\src\Faker\Provider\en_US\Text.php:3552:    forth in this 
+agreement, you must obtain permission in writing from
+vendor\fakerphp\faker\src\Faker\Provider\fr_CA\Text.php:2101:    permission 
+and without paying copyright royalties.  Special rules,
+vendor\fakerphp\faker\src\Faker\Provider\fr_CA\Text.php:2106:    charge for 
+the eBooks, unless you receive specific permission.  If you
+vendor\fakerphp\faker\src\Faker\Provider\fr_CA\Text.php:2196:    posted with 
+permission of the copyright holder), the work can be copied
+vendor\fakerphp\faker\src\Faker\Provider\fr_CA\Text.php:2201:    through 1.E.7 
+or obtain permission for the use of the work and the
+vendor\fakerphp\faker\src\Faker\Provider\fr_CA\Text.php:2206:    with the 
+permission of the copyright holder, your use and distribution
+vendor\fakerphp\faker\src\Faker\Provider\fr_CA\Text.php:2210:    permission of 
+the copyright holder found at the beginning of this work.
+vendor\fakerphp\faker\src\Faker\Provider\fr_CA\Text.php:2273:    forth in this 
+agreement, you must obtain permission in writing from
+vendor\fakerphp\faker\src\Faker\Provider\fr_FR\Text.php:3076:Homais demanda la 
+permission de garder son bonnet grec, de peur
+vendor\fakerphp\faker\src\Faker\Provider\fr_FR\Text.php:11081:permission 
+d'aller à la ville, une fois la semaine, voir son
+vendor\fakerphp\faker\src\Faker\Provider\fr_FR\Text.php:11816:C'était une 
+manière de permission qu'elle se donnait de ne point
+vendor\fakerphp\faker\src\Faker\Provider\fr_FR\Text.php:15194:    permission 
+and without paying copyright royalties.  Special rules,
+vendor\fakerphp\faker\src\Faker\Provider\fr_FR\Text.php:15199:    charge for 
+the eBooks, unless you receive specific permission.  If you
+vendor\fakerphp\faker\src\Faker\Provider\fr_FR\Text.php:15286:    posted with 
+permission of the copyright holder), the work can be copied
+vendor\fakerphp\faker\src\Faker\Provider\fr_FR\Text.php:15291:    through 
+1.E.7 or obtain permission for the use of the work and the
+vendor\fakerphp\faker\src\Faker\Provider\fr_FR\Text.php:15296:    with the 
+permission of the copyright holder, your use and distribution
+vendor\fakerphp\faker\src\Faker\Provider\fr_FR\Text.php:15300:    permission 
+of the copyright holder found at the beginning of this work.
+vendor\fakerphp\faker\src\Faker\Provider\fr_FR\Text.php:15363:    forth in 
+this agreement, you must obtain permission in writing from
+vendor\fakerphp\faker\src\Faker\Provider\it_IT\Text.php:1741:    permission 
+and without paying copyright royalties.  Special rules,
+vendor\fakerphp\faker\src\Faker\Provider\it_IT\Text.php:1746:    charge for 
+the eBooks, unless you receive specific permission.  If you
+vendor\fakerphp\faker\src\Faker\Provider\it_IT\Text.php:1833:    posted with 
+permission of the copyright holder), the work can be copied
+vendor\fakerphp\faker\src\Faker\Provider\it_IT\Text.php:1838:    through 1.E.7 
+or obtain permission for the use of the work and the
+vendor\fakerphp\faker\src\Faker\Provider\it_IT\Text.php:1843:    with the 
+permission of the copyright holder, your use and distribution
+vendor\fakerphp\faker\src\Faker\Provider\it_IT\Text.php:1847:    permission of 
+the copyright holder found at the beginning of this work.
+vendor\fakerphp\faker\src\Faker\Provider\it_IT\Text.php:1910:    forth in this 
+agreement, you must obtain permission in writing from
+vendor\fakerphp\faker\src\Faker\Provider\kk_KZ\Text.php:244:    has received 
+express permission from the Licensor to exercise rights
+vendor\fakerphp\faker\src\Faker\Provider\kk_KZ\Text.php:382:    written 
+permission of the Original Author, Licensor and/or Attribution
+vendor\fakerphp\faker\src\Faker\Provider\pl_PL\Text.php:16:     * header 
+without written permission.
+vendor\fakerphp\faker\src\Faker\Provider\pl_PL\Text.php:2736:    distribute it 
+in the United States without permission and
+vendor\fakerphp\faker\src\Faker\Provider\pl_PL\Text.php:2742:    any 
+commercial products without permission.
+vendor\fakerphp\faker\src\Faker\Provider\pl_PL\Text.php:2862:    express 
+permission.]
+vendor\fakerphp\faker\src\Faker\Provider\pt_BR\Text.php:3080:    States 
+without permission and without paying copyright
+vendor\fakerphp\faker\src\Faker\Provider\pt_BR\Text.php:3086:    specific 
+permission. If you do not charge anything for copies of this
+vendor\fakerphp\faker\src\Faker\Provider\pt_BR\Text.php:3177:    contain a 
+notice indicating that it is posted with permission of the
+vendor\fakerphp\faker\src\Faker\Provider\pt_BR\Text.php:3183:    obtain 
+permission for the use of the work and the Project Gutenberg-tm
+vendor\fakerphp\faker\src\Faker\Provider\pt_BR\Text.php:3187:    with the 
+permission of the copyright holder, your use and distribution
+vendor\fakerphp\faker\src\Faker\Provider\pt_BR\Text.php:3191:    posted with 
+the permission of the copyright holder found at the
+vendor\fakerphp\faker\src\Faker\Provider\pt_BR\Text.php:3255:    are set forth 
+in this agreement, you must obtain permission in writing
+vendor\fakerphp\faker\src\Faker\Provider\ro_MD\Text.php:2218:    has received 
+express permission from the Licensor to exercise rights
+vendor\fakerphp\faker\src\Faker\Provider\ro_MD\Text.php:2356:    written 
+permission of the Original Author, Licensor and/or Attribution
+vendor\fakerphp\faker\src\Faker\Provider\ru_RU\Text.php:4303:    has received 
+express permission from the Licensor to exercise rights
+vendor\fakerphp\faker\src\Faker\Provider\ru_RU\Text.php:4441:    written 
+permission of the Original Author, Licensor and/or Attribution
+vendor\fakerphp\faker\src\Faker\Provider\uk_UA\Text.php:4264:    has received 
+express permission from the Licensor to exercise rights
+vendor\fakerphp\faker\src\Faker\Provider\uk_UA\Text.php:4402:    written 
+permission of the Original Author, Licensor and/or Attribution
+vendor\laravel\framework\src\Illuminate\Cache\CacheManager.php:297:            
+    $config['permission'] ?? null,
+vendor\laravel\framework\src\Illuminate\Cache\FileStore.php:41:     * Octal 
+representation of the cache file permissions.
+vendor\laravel\framework\src\Illuminate\Cache\FileStore.php:45:    protected 
+$filePermission;
+vendor\laravel\framework\src\Illuminate\Cache\FileStore.php:59:     * @param  
+int|null  $filePermission
+vendor\laravel\framework\src\Illuminate\Cache\FileStore.php:62:    public 
+function __construct(Filesystem $files, $directory, $filePermission = null, 
+$serializableClasses = null)
+vendor\laravel\framework\src\Illuminate\Cache\FileStore.php:66:        
+$this->filePermission = $filePermission;
+vendor\laravel\framework\src\Illuminate\Cache\FileStore.php:98:            
+$this->ensurePermissionsAreCorrect($path);
+vendor\laravel\framework\src\Illuminate\Cache\FileStore.php:135:            
+$this->ensurePermissionsAreCorrect($path);
+vendor\laravel\framework\src\Illuminate\Cache\FileStore.php:159:            
+$this->ensurePermissionsAreCorrect($directory);
+vendor\laravel\framework\src\Illuminate\Cache\FileStore.php:160:            
+$this->ensurePermissionsAreCorrect(dirname($directory));
+vendor\laravel\framework\src\Illuminate\Cache\FileStore.php:165:     * Ensure 
+the created node has the correct permissions.
+vendor\laravel\framework\src\Illuminate\Cache\FileStore.php:170:    protected 
+function ensurePermissionsAreCorrect($path)
+vendor\laravel\framework\src\Illuminate\Cache\FileStore.php:172:        if 
+(is_null($this->filePermission) ||
+vendor\laravel\framework\src\Illuminate\Cache\FileStore.php:173:            
+intval($this->files->chmod($path), 8) == $this->filePermission) {
+vendor\laravel\framework\src\Illuminate\Cache\FileStore.php:177:        
+$this->files->chmod($path, $this->filePermission);
+vendor\laravel\framework\src\Illuminate\Cache\FileStore.php:233:            
+new static($this->files, $this->lockDirectory ?? $this->directory, 
+$this->filePermission, $this->serializableClasses),
+vendor\laravel\framework\src\Illuminate\Cache\Console\ClearCommand.php:78:     
+       $this->components->error('Failed to clear cache. Make sure you have the 
+appropriate permissions.');
+vendor\laravel\framework\src\Illuminate\Cache\Console\ClearCommand.php:114:    
+        $this->components->error('Failed to clear cache locks. Make sure you 
+have the appropriate permissions.');
+vendor\laravel\framework\src\Illuminate\Filesystem\Filesystem.php:224:        
+// Fix permissions of tempPath because `tempnam()` creates it with permissions 
+set to 0600...
+vendor\laravel\framework\src\Illuminate\Filesystem\FilesystemManager.php:182:  
+          $config['permissions'] ?? [],
+vendor\laravel\framework\src\Illuminate\Filesystem\FilesystemManager.php:234:  
+          $config['permissions'] ?? []
+vendor\laravel\framework\src\Illuminate\Foundation\AliasLoader.php:113:        
+// Fix permissions of tempPath because `tempnam()` creates it with permissions 
+set to 0600...
+vendor\laravel\framework\src\Illuminate\Foundation\Exceptions\Renderer\Mappers\
+BladeMapper.php:27: * Permission is hereby granted, free of charge, to any 
+person obtaining a copy
+vendor\laravel\framework\src\Illuminate\Foundation\Exceptions\Renderer\Mappers\
+BladeMapper.php:34: * The above copyright notice and this permission notice 
+shall be included in
+vendor\laravel\framework\src\Illuminate\Log\LogManager.php:314:                
+    $config['bubble'] ?? true, $config['permission'] ?? null, 
+$config['locking'] ?? false
+vendor\laravel\framework\src\Illuminate\Log\LogManager.php:331:                
+$config['bubble'] ?? true, $config['permission'] ?? null, $config['locking'] 
+?? false
+vendor\laravel\framework\src\Illuminate\Mail\Transport\ResendTransport.php:21:P
+ermission is hereby granted, free of charge, to any person obtaining a copy
+vendor\laravel\framework\src\Illuminate\Mail\Transport\ResendTransport.php:28:T
+he above copyright notice and this permission notice shall be included in all
+vendor\laravel\mcp\resources\boost\skills\mcp-development\SKILL.blade.php:3:des
+cription: "Use this skill for Laravel MCP development. Trigger when creating 
+or editing MCP tools, resources, prompts, servers, or UI apps in Laravel 
+projects. Covers: artisan make:mcp-* generators, routes/ai.php, 
+Tool/Resource/Prompt/AppResource classes, schema validation, shouldRegister(), 
+OAuth setup, URI templates, read-only attributes, MCP debugging, MCP UI apps, 
+the x-mcp::app Blade component, createMcpApp(), default AppResource handle() 
+auto-infers view from class name, Response::view(), 
+AppMeta/Csp/Permissions/appMeta() configuration, #[RendersApp] attribute, 
+Library enum for CDN libraries (Tailwind, Alpine), and host theming via CSS 
+variables. Use this whenever the user mentions MCP apps, MCP UI, interactive 
+MCP resources, styling MCP apps with Tailwind or Alpine, or building visual 
+interfaces for AI agents."
+vendor\laravel\mcp\resources\boost\skills\mcp-development\SKILL.blade.php:92:Fo
+r MCP UI apps, read `references/app.md` — it covers quick start examples, full 
+architecture, AppMeta/Csp/Permissions, `#[RendersApp]` tool linking, library 
+scripts (Tailwind/Alpine via `Library`), host theming CSS variables, and 
+real-world patterns.
+vendor\laravel\mcp\resources\views\mcp\authorize.blade.php:77:                
+<!-- Scopes / Permissions -->
+vendor\laravel\mcp\resources\views\mcp\authorize.blade.php:80:                 
+       <p class="text-sm font-medium">Permissions:</p>
+vendor\laravel\mcp\src\Server\Attributes\AppMeta.php:11:use 
+Laravel\Mcp\Server\Ui\Enums\Permission;
+vendor\laravel\mcp\src\Server\Attributes\AppMeta.php:12:use 
+Laravel\Mcp\Server\Ui\Permissions;
+vendor\laravel\mcp\src\Server\Attributes\AppMeta.php:22:     * @param  
+array<int, Permission>|null  $permissions
+vendor\laravel\mcp\src\Server\Attributes\AppMeta.php:30:        public 
+readonly ?array $permissions = null,
+vendor\laravel\mcp\src\Server\Attributes\AppMeta.php:46:        if 
+($this->permissions !== null) {
+vendor\laravel\mcp\src\Server\Attributes\AppMeta.php:47:            
+$meta->permissions(Permissions::make()->allow(...$this->permissions));
+vendor\laravel\mcp\src\Server\Ui\AppMeta.php:20:        protected ?Permissions 
+$permissions = null,
+vendor\laravel\mcp\src\Server\Ui\AppMeta.php:40:    public function 
+permissions(Permissions $permissions): static
+vendor\laravel\mcp\src\Server\Ui\AppMeta.php:42:        $this->permissions = 
+$permissions;
+vendor\laravel\mcp\src\Server\Ui\AppMeta.php:100:            'permissions' => 
+$this->permissions?->toArray() ?: null,
+vendor\laravel\mcp\src\Server\Ui\Permissions.php:8:use 
+Laravel\Mcp\Server\Ui\Enums\Permission;
+vendor\laravel\mcp\src\Server\Ui\Permissions.php:14:class Permissions 
+implements Arrayable
+vendor\laravel\mcp\src\Server\Ui\Permissions.php:16:    /** @var array<int, 
+Permission> */
+vendor\laravel\mcp\src\Server\Ui\Permissions.php:26:        return 
+$this->allow(Permission::Camera);
+vendor\laravel\mcp\src\Server\Ui\Permissions.php:31:        return 
+$this->allow(Permission::Microphone);
+vendor\laravel\mcp\src\Server\Ui\Permissions.php:36:        return 
+$this->allow(Permission::Geolocation);
+vendor\laravel\mcp\src\Server\Ui\Permissions.php:41:        return 
+$this->allow(Permission::ClipboardWrite);
+vendor\laravel\mcp\src\Server\Ui\Permissions.php:44:    public function 
+allow(Permission ...$permissions): static
+vendor\laravel\mcp\src\Server\Ui\Permissions.php:46:        
+array_push($this->enabled, ...$permissions);
+vendor\laravel\mcp\src\Server\Ui\Permissions.php:58:        foreach 
+($this->enabled as $permission) {
+vendor\laravel\mcp\src\Server\Ui\Permissions.php:59:            
+$result[$permission->value] = new stdClass;
+vendor\laravel\mcp\src\Server\Ui\Enums\Permission.php:7:enum Permission: string
+vendor\laravel\pint\overrides\Runner\Parallel\ProcessFactory.php:20: * 
+Permission is hereby granted, free of charge, to any person obtaining a copy
+vendor\laravel\pint\overrides\Runner\Parallel\ProcessFactory.php:27: * The 
+above copyright notice and this permission notice shall be included in all
+vendor\league\flysystem\src\UnixVisibility\PortableVisibilityConverter.php:67: 
+    * @param array<mixed>  $permissionMap
+vendor\league\flysystem\src\UnixVisibility\PortableVisibilityConverter.php:69: 
+   public static function fromArray(array $permissionMap, string 
+$defaultForDirectories = Visibility::PRIVATE): PortableVisibilityConverter
+vendor\league\flysystem\src\UnixVisibility\PortableVisibilityConverter.php:72: 
+           $permissionMap['file']['public'] ?? 0644,
+vendor\league\flysystem\src\UnixVisibility\PortableVisibilityConverter.php:73: 
+           $permissionMap['file']['private'] ?? 0600,
+vendor\league\flysystem\src\UnixVisibility\PortableVisibilityConverter.php:74: 
+           $permissionMap['dir']['public'] ?? 0755,
+vendor\league\flysystem\src\UnixVisibility\PortableVisibilityConverter.php:75: 
+           $permissionMap['dir']['private'] ?? 0700,
+vendor\league\flysystem-local\LocalFilesystemAdapter.php:227:                
+$permissions = octdec(substr(sprintf('%o', $fileInfo->getPerms()), -4));
+vendor\league\flysystem-local\LocalFilesystemAdapter.php:228:                
+$visibility = $isDirectory ? 
+$this->visibility->inverseForDirectory($permissions) : 
+$this->visibility->inverseForFile($permissions);
+vendor\league\flysystem-local\LocalFilesystemAdapter.php:358:        
+$permissions = $this->resolveDirectoryVisibility($visibility);
+vendor\league\flysystem-local\LocalFilesystemAdapter.php:361:            
+$this->setPermissions($location, $permissions);
+vendor\league\flysystem-local\LocalFilesystemAdapter.php:368:        if ( ! 
+@mkdir($location, $permissions, true)) {
+vendor\league\flysystem-local\LocalFilesystemAdapter.php:380:        
+$this->setPermissions($path, $visibility);
+vendor\league\flysystem-local\LocalFilesystemAdapter.php:394:        
+$permissions = $fileperms & 0777;
+vendor\league\flysystem-local\LocalFilesystemAdapter.php:395:        
+$visibility = $this->visibility->inverseForFile($permissions);
+vendor\league\flysystem-local\LocalFilesystemAdapter.php:479:    private 
+function setPermissions(string $location, int $visibility): void
+vendor\monolog\monolog\src\Monolog\Handler\RotatingFileHandler.php:45:     * 
+@param int|null $filePermission Optional file permissions (default (0644) are 
+only for owner read/write)
+vendor\monolog\monolog\src\Monolog\Handler\RotatingFileHandler.php:48:    
+public function __construct(string $filename, int $maxFiles = 0, 
+int|string|Level $level = Level::Debug, bool $bubble = true, ?int 
+$filePermission = null, bool $useLocking = false, string $dateFormat = 
+self::FILE_PER_DAY, string $filenameFormat  = '{filename}-{date}', 
+DateTimeZone|null $timezone = null)
+vendor\monolog\monolog\src\Monolog\Handler\RotatingFileHandler.php:56:        
+parent::__construct($this->getTimedFilename(), $level, $bubble, 
+$filePermission, $useLocking);
+vendor\monolog\monolog\src\Monolog\Handler\StreamHandler.php:35:    protected 
+int|null $filePermission;
+vendor\monolog\monolog\src\Monolog\Handler\StreamHandler.php:45:     * @param 
+int|null        $filePermission Optional file permissions (default (0644) are 
+only for owner read/write)
+vendor\monolog\monolog\src\Monolog\Handler\StreamHandler.php:51:    public 
+function __construct($stream, int|string|Level $level = Level::Debug, bool 
+$bubble = true, ?int $filePermission = null, bool $useLocking = false, string 
+$fileOpenMode = 'a')
+vendor\monolog\monolog\src\Monolog\Handler\StreamHandler.php:79:        
+$this->filePermission = $filePermission;
+vendor\monolog\monolog\src\Monolog\Handler\StreamHandler.php:155:              
+  if ($this->filePermission !== null) {
+vendor\monolog\monolog\src\Monolog\Handler\StreamHandler.php:156:              
+      @chmod($url, $this->filePermission);
+vendor\nette\utils\src\Utils\FileSystem.php:239:	 * Sets file permissions to 
+`$fileMode` or directory permissions to `$dirMode`.
+vendor\nette\utils\src\Utils\FileSystem.php:240:	 * Recursively traverses and 
+sets permissions on the entire contents of the directory as well.
+vendor\pestphp\pest\overrides\Event\Value\ThrowableBuilder.php:21: *    this 
+software without specific prior written permission.
+vendor\pestphp\pest\overrides\Logging\JUnit\JunitXmlLogger.php:21: *    this 
+software without specific prior written permission.
+vendor\pestphp\pest\overrides\Runner\TestSuiteLoader.php:21: *    this 
+software without specific prior written permission.
+vendor\pestphp\pest\overrides\Runner\TestSuiteSorter.php:21: *    this 
+software without specific prior written permission.
+vendor\pestphp\pest\overrides\Runner\Filter\NameFilterIterator.php:21: *    
+this software without specific prior written permission.
+vendor\pestphp\pest\overrides\Runner\ResultCache\DefaultResultCache.php:21: *  
+  this software without specific prior written permission.
+vendor\pestphp\pest\overrides\TextUI\TestSuiteFilterProcessor.php:21: *    
+this software without specific prior written permission.
+vendor\pestphp\pest\overrides\TextUI\Command\Commands\WarmCodeCoverageCacheComm
+and.php:21: *    this software without specific prior written permission.
+vendor\pestphp\pest\overrides\TextUI\Output\Default\ProgressPrinter\Subscriber\
+TestSkippedSubscriber.php:21: *    this software without specific prior 
+written permission.
+vendor\pestphp\pest\src\Expectation.php:448:     * Asserts that the given 
+expectation target does have the given permissions
+vendor\pestphp\pest\src\Expectation.php:450:    public function 
+toHaveFileSystemPermissions(string $permissions): ArchExpectation
+vendor\pestphp\pest\src\Expectation.php:454:            fn (ObjectDescription 
+$object): bool => substr(sprintf('%o', fileperms($object->path)), -4) === 
+$permissions,
+vendor\pestphp\pest\src\Expectation.php:455:            sprintf('permissions 
+to be [%s]', $permissions),
+vendor\pestphp\pest\src\Expectations\OppositeExpectation.php:88:     * Asserts 
+that the given expectation target does not have the given permissions
+vendor\pestphp\pest\src\Expectations\OppositeExpectation.php:90:    public 
+function toHaveFileSystemPermissions(string $permissions): ArchExpectation
+vendor\pestphp\pest\src\Expectations\OppositeExpectation.php:97:            fn 
+(ObjectDescription $object): bool => substr(sprintf('%o', 
+fileperms($object->path)), -4) !== $permissions,
+vendor\pestphp\pest\src\Expectations\OppositeExpectation.php:98:            
+sprintf('permissions not to be [%s]', $permissions),
+vendor\phpoption\phpoption\src\PhpOption\LazyOption.php:15: * See the License 
+for the specific language governing permissions and
+vendor\phpoption\phpoption\src\PhpOption\None.php:15: * See the License for 
+the specific language governing permissions and
+vendor\phpoption\phpoption\src\PhpOption\Option.php:15: * See the License for 
+the specific language governing permissions and
+vendor\phpoption\phpoption\src\PhpOption\Some.php:15: * See the License for 
+the specific language governing permissions and
+vendor\psr\http-message\src\UploadedFileInterface.php:53:     * used to ensure 
+permissions and upload status are verified correctly.
+vendor\psy\psysh\src\Readline\Hoa\Autocompleter.php:22: *       specific prior 
+written permission.
+vendor\psy\psysh\src\Readline\Hoa\AutocompleterAggregate.php:22: *       
+specific prior written permission.
+vendor\psy\psysh\src\Readline\Hoa\AutocompleterPath.php:22: *       specific 
+prior written permission.
+vendor\psy\psysh\src\Readline\Hoa\AutocompleterWord.php:22: *       specific 
+prior written permission.
+vendor\psy\psysh\src\Readline\Hoa\Console.php:22: *       specific prior 
+written permission.
+vendor\psy\psysh\src\Readline\Hoa\ConsoleCursor.php:22: *       specific prior 
+written permission.
+vendor\psy\psysh\src\Readline\Hoa\ConsoleException.php:22: *       specific 
+prior written permission.
+vendor\psy\psysh\src\Readline\Hoa\ConsoleInput.php:22: *       specific prior 
+written permission.
+vendor\psy\psysh\src\Readline\Hoa\ConsoleOutput.php:22: *       specific prior 
+written permission.
+vendor\psy\psysh\src\Readline\Hoa\ConsoleProcessus.php:22: *       specific 
+prior written permission.
+vendor\psy\psysh\src\Readline\Hoa\ConsoleTput.php:22: *       specific prior 
+written permission.
+vendor\psy\psysh\src\Readline\Hoa\ConsoleWindow.php:22: *       specific prior 
+written permission.
+vendor\psy\psysh\src\Readline\Hoa\Event.php:22: *       specific prior written 
+permission.
+vendor\psy\psysh\src\Readline\Hoa\EventBucket.php:22: *       specific prior 
+written permission.
+vendor\psy\psysh\src\Readline\Hoa\EventException.php:22: *       specific 
+prior written permission.
+vendor\psy\psysh\src\Readline\Hoa\EventListenable.php:22: *       specific 
+prior written permission.
+vendor\psy\psysh\src\Readline\Hoa\EventListener.php:22: *       specific prior 
+written permission.
+vendor\psy\psysh\src\Readline\Hoa\EventListens.php:22: *       specific prior 
+written permission.
+vendor\psy\psysh\src\Readline\Hoa\EventSource.php:22: *       specific prior 
+written permission.
+vendor\psy\psysh\src\Readline\Hoa\Exception.php:22: *       specific prior 
+written permission.
+vendor\psy\psysh\src\Readline\Hoa\ExceptionIdle.php:22: *       specific prior 
+written permission.
+vendor\psy\psysh\src\Readline\Hoa\File.php:22: *       specific prior written 
+permission.
+vendor\psy\psysh\src\Readline\Hoa\FileDirectory.php:22: *       specific prior 
+written permission.
+vendor\psy\psysh\src\Readline\Hoa\FileDoesNotExistException.php:22: *       
+specific prior written permission.
+vendor\psy\psysh\src\Readline\Hoa\FileException.php:22: *       specific prior 
+written permission.
+vendor\psy\psysh\src\Readline\Hoa\FileFinder.php:22: *       specific prior 
+written permission.
+vendor\psy\psysh\src\Readline\Hoa\FileGeneric.php:22: *       specific prior 
+written permission.
+vendor\psy\psysh\src\Readline\Hoa\FileGeneric.php:128:     * Get file 
+permissions.
+vendor\psy\psysh\src\Readline\Hoa\FileGeneric.php:130:    public function 
+getPermissions(): int
+vendor\psy\psysh\src\Readline\Hoa\FileGeneric.php:136:     * Get file 
+permissions as a string.
+vendor\psy\psysh\src\Readline\Hoa\FileGeneric.php:147:    public function 
+getReadablePermissions(): string
+vendor\psy\psysh\src\Readline\Hoa\FileGeneric.php:149:        $p = 
+$this->getPermissions();
+vendor\psy\psysh\src\Readline\Hoa\FileLink.php:22: *       specific prior 
+written permission.
+vendor\psy\psysh\src\Readline\Hoa\FileLink.php:89:     * Get file permissions.
+vendor\psy\psysh\src\Readline\Hoa\FileLink.php:91:    public function 
+getPermissions(): int
+vendor\psy\psysh\src\Readline\Hoa\FileLinkRead.php:22: *       specific prior 
+written permission.
+vendor\psy\psysh\src\Readline\Hoa\FileLinkReadWrite.php:22: *       specific 
+prior written permission.
+vendor\psy\psysh\src\Readline\Hoa\FileRead.php:22: *       specific prior 
+written permission.
+vendor\psy\psysh\src\Readline\Hoa\FileReadWrite.php:22: *       specific prior 
+written permission.
+vendor\psy\psysh\src\Readline\Hoa\IStream.php:22: *       specific prior 
+written permission.
+vendor\psy\psysh\src\Readline\Hoa\IteratorFileSystem.php:22: *       specific 
+prior written permission.
+vendor\psy\psysh\src\Readline\Hoa\IteratorRecursiveDirectory.php:22: *       
+specific prior written permission.
+vendor\psy\psysh\src\Readline\Hoa\IteratorSplFileInfo.php:22: *       specific 
+prior written permission.
+vendor\psy\psysh\src\Readline\Hoa\Protocol.php:22: *       specific prior 
+written permission.
+vendor\psy\psysh\src\Readline\Hoa\ProtocolException.php:22: *       specific 
+prior written permission.
+vendor\psy\psysh\src\Readline\Hoa\ProtocolNode.php:22: *       specific prior 
+written permission.
+vendor\psy\psysh\src\Readline\Hoa\ProtocolNodeLibrary.php:22: *       specific 
+prior written permission.
+vendor\psy\psysh\src\Readline\Hoa\ProtocolWrapper.php:22: *       specific 
+prior written permission.
+vendor\psy\psysh\src\Readline\Hoa\Readline.php:22: *       specific prior 
+written permission.
+vendor\psy\psysh\src\Readline\Hoa\Stream.php:22: *       specific prior 
+written permission.
+vendor\psy\psysh\src\Readline\Hoa\StreamBufferable.php:22: *       specific 
+prior written permission.
+vendor\psy\psysh\src\Readline\Hoa\StreamContext.php:22: *       specific prior 
+written permission.
+vendor\psy\psysh\src\Readline\Hoa\StreamException.php:22: *       specific 
+prior written permission.
+vendor\psy\psysh\src\Readline\Hoa\StreamIn.php:22: *       specific prior 
+written permission.
+vendor\psy\psysh\src\Readline\Hoa\StreamLockable.php:22: *       specific 
+prior written permission.
+vendor\psy\psysh\src\Readline\Hoa\StreamOut.php:22: *       specific prior 
+written permission.
+vendor\psy\psysh\src\Readline\Hoa\StreamPathable.php:22: *       specific 
+prior written permission.
+vendor\psy\psysh\src\Readline\Hoa\StreamPointable.php:22: *       specific 
+prior written permission.
+vendor\psy\psysh\src\Readline\Hoa\StreamStatable.php:22: *       specific 
+prior written permission.
+vendor\psy\psysh\src\Readline\Hoa\StreamStatable.php:87:     * Get file 
+permissions.
+vendor\psy\psysh\src\Readline\Hoa\StreamStatable.php:89:    public function 
+getPermissions(): int;
+vendor\psy\psysh\src\Readline\Hoa\StreamTouchable.php:22: *       specific 
+prior written permission.
+vendor\psy\psysh\src\Readline\Hoa\Ustring.php:22: *       specific prior 
+written permission.
+vendor\psy\psysh\src\Readline\Hoa\Xcallable.php:22: *       specific prior 
+written permission.
+vendor\psy\psysh\src\TabCompletion\AutoloadWarmer\ComposerAutoloadWarmer.php:29
+2:                        // Ignore errors (permissions, malformed files, etc.)
+vendor\psy\psysh\src\TabCompletion\AutoloadWarmer\ComposerAutoloadWarmer.php:39
+7:                // File doesn't exist, permissions, etc. /shrug
+vendor\ramsey\uuid\src\Math\RoundingMode.php:8: * Permission is hereby 
+granted, free of charge, to any person obtaining a copy
+vendor\ramsey\uuid\src\Math\RoundingMode.php:15: * The above copyright notice 
+and this permission notice shall be included in
+vendor\spatie\laravel-permission\config\permission.php:8:         * When using 
+the "HasPermissions" trait from this package, we need to know which
+vendor\spatie\laravel-permission\config\permission.php:9:         * Eloquent 
+model should be used to retrieve your permissions. Of course, it
+vendor\spatie\laravel-permission\config\permission.php:10:         * is often 
+just the "Permission" model but you may use whatever you like.
+vendor\spatie\laravel-permission\config\permission.php:12:         * The model 
+you want to use as a Permission model needs to implement the
+vendor\spatie\laravel-permission\config\permission.php:13:         * 
+`Spatie\Permission\Contracts\Permission` contract.
+vendor\spatie\laravel-permission\config\permission.php:16:        'permission' 
+=> Spatie\Permission\Models\Permission::class,
+vendor\spatie\laravel-permission\config\permission.php:24:         * 
+`Spatie\Permission\Contracts\Role` contract.
+vendor\spatie\laravel-permission\config\permission.php:27:        'role' => 
+Spatie\Permission\Models\Role::class,
+vendor\spatie\laravel-permission\config\permission.php:42:         * When 
+using the "HasPermissions" trait from this package, we need to know which
+vendor\spatie\laravel-permission\config\permission.php:43:         * table 
+should be used to retrieve your permissions. We have chosen a basic
+vendor\spatie\laravel-permission\config\permission.php:47:        
+'permissions' => 'permissions',
+vendor\spatie\laravel-permission\config\permission.php:50:         * When 
+using the "HasPermissions" trait from this package, we need to know which
+vendor\spatie\laravel-permission\config\permission.php:51:         * table 
+should be used to retrieve your models permissions. We have chosen a
+vendor\spatie\laravel-permission\config\permission.php:55:        
+'model_has_permissions' => 'model_has_permissions',
+vendor\spatie\laravel-permission\config\permission.php:67:         * table 
+should be used to retrieve your roles permissions. We have chosen a
+vendor\spatie\laravel-permission\config\permission.php:71:        
+'role_has_permissions' => 'role_has_permissions',
+vendor\spatie\laravel-permission\config\permission.php:79:        
+'permission_pivot_key' => null, // default 'permission_id',
+vendor\spatie\laravel-permission\config\permission.php:100:     * When set to 
+true, the method for checking permissions will be registered on the gate.
+vendor\spatie\laravel-permission\config\permission.php:101:     * Set this to 
+false if you want to implement custom logic for checking permissions.
+vendor\spatie\laravel-permission\config\permission.php:104:    
+'register_permission_check_method' => true,
+vendor\spatie\laravel-permission\config\permission.php:108:     * this will 
+refresh permissions on every TickTerminated, TaskTerminated and 
+RequestTerminated
+vendor\spatie\laravel-permission\config\permission.php:114:     * Events will 
+fire when a role or permission is assigned/unassigned:
+vendor\spatie\laravel-permission\config\permission.php:115:     * 
+\Spatie\Permission\Events\RoleAttachedEvent
+vendor\spatie\laravel-permission\config\permission.php:116:     * 
+\Spatie\Permission\Events\RoleDetachedEvent
+vendor\spatie\laravel-permission\config\permission.php:117:     * 
+\Spatie\Permission\Events\PermissionAttachedEvent
+vendor\spatie\laravel-permission\config\permission.php:118:     * 
+\Spatie\Permission\Events\PermissionDetachedEvent
+vendor\spatie\laravel-permission\config\permission.php:130:     * add 
+'team_foreign_key' to 'roles', 'model_has_roles', and 'model_has_permissions'
+vendor\spatie\laravel-permission\config\permission.php:137:     * The class to 
+use to resolve the permissions team id
+vendor\spatie\laravel-permission\config\permission.php:139:    'team_resolver' 
+=> \Spatie\Permission\DefaultTeamResolver::class,
+vendor\spatie\laravel-permission\config\permission.php:143:     * When set to 
+true the package will use Passports Client to check permissions
+vendor\spatie\laravel-permission\config\permission.php:149:     * When set to 
+true, the required permission names are added to exception messages.
+vendor\spatie\laravel-permission\config\permission.php:154:    
+'display_permission_in_exception' => false,
+vendor\spatie\laravel-permission\config\permission.php:165:     * By default 
+wildcard permission lookups are disabled.
+vendor\spatie\laravel-permission\config\permission.php:169:    
+'enable_wildcard_permission' => false,
+vendor\spatie\laravel-permission\config\permission.php:172:     * The class to 
+use for interpreting wildcard permissions.
+vendor\spatie\laravel-permission\config\permission.php:175:    // 
+'wildcard_permission' => Spatie\Permission\WildcardPermission::class,
+vendor\spatie\laravel-permission\config\permission.php:182:         * By 
+default all permissions are cached for 24 hours to speed up performance.
+vendor\spatie\laravel-permission\config\permission.php:183:         * When 
+permissions or roles are updated the cache is flushed automatically.
+vendor\spatie\laravel-permission\config\permission.php:189:         * The 
+cache key used to store all permissions.
+vendor\spatie\laravel-permission\config\permission.php:192:        'key' => 
+'spatie.permission.cache',
+vendor\spatie\laravel-permission\config\permission.php:195:         * You may 
+optionally indicate a specific cache driver to use for permission and
+vendor\spatie\laravel-permission\src\DefaultTeamResolver.php:3:namespace 
+Spatie\Permission;
+vendor\spatie\laravel-permission\src\DefaultTeamResolver.php:6:use 
+Spatie\Permission\Contracts\PermissionsTeamResolver;
+vendor\spatie\laravel-permission\src\DefaultTeamResolver.php:8:class 
+DefaultTeamResolver implements PermissionsTeamResolver
+vendor\spatie\laravel-permission\src\DefaultTeamResolver.php:12:    public 
+function setPermissionsTeamId(int|string|Model|null $id): void
+vendor\spatie\laravel-permission\src\DefaultTeamResolver.php:20:    public 
+function getPermissionsTeamId(): int|string|null
+vendor\spatie\laravel-permission\src\Guard.php:3:namespace Spatie\Permission;
+vendor\spatie\laravel-permission\src\helpers.php:4:use Spatie\Permission\Guard;
+vendor\spatie\laravel-permission\src\helpers.php:5:use 
+Spatie\Permission\PermissionRegistrar;
+vendor\spatie\laravel-permission\src\helpers.php:14:if (! 
+function_exists('setPermissionsTeamId')) {
+vendor\spatie\laravel-permission\src\helpers.php:15:    function 
+setPermissionsTeamId(int|string|Model|null $id): void
+vendor\spatie\laravel-permission\src\helpers.php:17:        
+app(PermissionRegistrar::class)->setPermissionsTeamId($id);
+vendor\spatie\laravel-permission\src\helpers.php:21:if (! 
+function_exists('getPermissionsTeamId')) {
+vendor\spatie\laravel-permission\src\helpers.php:22:    function 
+getPermissionsTeamId(): int|string|null
+vendor\spatie\laravel-permission\src\helpers.php:24:        return 
+app(PermissionRegistrar::class)->getPermissionsTeamId();
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:3:namespace 
+Spatie\Permission;
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:13:use 
+Spatie\Permission\Contracts\Permission;
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:14:use 
+Spatie\Permission\Contracts\PermissionsTeamResolver;
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:15:use 
+Spatie\Permission\Contracts\Role;
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:17:class 
+PermissionRegistrar
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:23:    protected 
+string $permissionClass;
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:27:    protected 
+Collection|array|null $permissions = null;
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:31:    public 
+string $pivotPermission;
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:37:    protected 
+PermissionsTeamResolver $teamResolver;
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:49:    private 
+array $wildcardPermissionsIndex = [];
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:51:    private 
+bool $isLoadingPermissions = false;
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:55:        
+$this->permissionClass = config('permission.models.permission');
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:56:        
+$this->roleClass = config('permission.models.role');
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:57:        
+$this->teamResolver = new (config('permission.team_resolver', 
+DefaultTeamResolver::class));
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:65:        
+$this->cacheExpirationTime = config('permission.cache.expiration_time') ?: 
+DateInterval::createFromDateString('24 hours');
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:67:        
+$this->teams = config('permission.teams', false);
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:68:        
+$this->teamsKey = config('permission.column_names.team_foreign_key', 
+'team_id');
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:70:        
+$this->cacheKey = config('permission.cache.key');
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:72:        
+$this->pivotRole = config('permission.column_names.role_pivot_key') ?: 
+'role_id';
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:73:        
+$this->pivotPermission = 
+config('permission.column_names.permission_pivot_key') ?: 'permission_id';
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:80:        // the 
+'default' fallback here is from the permission.php config file,
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:82:        
+$cacheDriver = config('permission.cache.store', 'default');
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:97:    public 
+function setPermissionsTeamId(int|string|Model|null $id): void
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:99:        
+$this->teamResolver->setPermissionsTeamId($id);
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:102:    public 
+function getPermissionsTeamId(): int|string|null
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:104:        
+return $this->teamResolver->getPermissionsTeamId();
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:108:     * 
+Register the permission check method on the gate.
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:111:    public 
+function registerPermissions(Gate $gate): bool
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:117:            
+if (method_exists($user, 'checkPermissionTo')) {
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:118:              
+  return $user->checkPermissionTo($ability, $guard ?? null) ?: null;
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:128:    public 
+function forgetCachedPermissions(): bool
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:130:        
+$this->permissions = null;
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:131:        
+$this->forgetWildcardPermissionIndex();
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:136:    public 
+function forgetWildcardPermissionIndex(?Model $record = null): void
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:139:            
+unset($this->wildcardPermissionsIndex[$record::class][$record->getKey()]);
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:144:        
+$this->wildcardPermissionsIndex = [];
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:147:    public 
+function getWildcardPermissionIndex(Model $record): array
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:149:        if 
+(isset($this->wildcardPermissionsIndex[$record::class][$record->getKey()])) {
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:150:            
+return $this->wildcardPermissionsIndex[$record::class][$record->getKey()];
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:153:        
+return $this->wildcardPermissionsIndex[$record::class][$record->getKey()] = 
+app($record->getWildcardClass(), ['record' => $record])->getIndex();
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:157:     * Clear 
+already-loaded permissions collection.
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:158:     * This 
+is only intended to be called by the PermissionServiceProvider on boot,
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:161:    public 
+function clearPermissionsCollection(): void
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:163:        
+$this->permissions = null;
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:164:        
+$this->wildcardPermissionsIndex = [];
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:165:        
+$this->isLoadingPermissions = false;
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:169:     * Load 
+permissions from cache
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:170:     * And 
+turns permissions array into a \Illuminate\Database\Eloquent\Collection
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:175:    private 
+function loadPermissions(int $retries = 0): void
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:177:        // 
+First check (without lock) - fast path for already loaded permissions
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:178:        if 
+($this->permissions) {
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:184:        if 
+($this->isLoadingPermissions && $retries < 10) {
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:189:            
+// After wait, recursively check again if permissions were loaded
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:190:            
+$this->loadPermissions($retries);
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:196:        
+$this->isLoadingPermissions = true;
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:199:            
+$this->permissions = $this->cache->remember(
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:200:              
+  $this->cacheKey, $this->cacheExpirationTime, fn () => 
+$this->getSerializedPermissionsForCache()
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:203:            
+$this->alias = $this->permissions['alias'];
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:207:            
+$this->permissions = $this->getHydratedPermissionCollection();
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:212:            
+$this->isLoadingPermissions = false;
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:217:     * Get 
+the permissions based on the passed params.
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:219:    public 
+function getPermissions(array $params = [], bool $onlyOne = false): Collection
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:221:        
+$this->loadPermissions();
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:225:        
+$permissions = $this->permissions->$method(static function ($permission) use 
+($params) {
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:226:            
+return array_all($params, fn ($value, $attr) => 
+$permission->getAttribute($attr) == $value);
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:231:            
+$permissions = new Collection($permissions ? [$permissions] : []);
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:234:        
+return $permissions;
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:237:    public 
+function getPermissionClass(): string
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:239:        
+return $this->permissionClass;
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:242:    public 
+function setPermissionClass(string $permissionClass): static
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:244:        
+$this->permissionClass = $permissionClass;
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:245:        
+config()->set('permission.models.permission', $permissionClass);
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:246:        
+app()->bind(Permission::class, $permissionClass);
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:259:        
+config()->set('permission.models.role', $roleClass);
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:275:    protected 
+function getPermissionsWithRoles(): Collection
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:277:        
+return $this->permissionClass::select()->with('roles')->get();
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:310:    private 
+function getSerializedPermissionsForCache(): array
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:312:        
+$this->except = config('permission.cache.column_names_except', ['created_at', 
+'updated_at', 'deleted_at']);
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:314:        
+$permissions = $this->getPermissionsWithRoles()
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:315:            
+->map(function ($permission) {
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:317:              
+      $this->aliasModelFields($permission);
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:320:              
+  return $this->aliasedArray($permission) + 
+$this->getSerializedRoleRelation($permission);
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:325:        
+return ['alias' => array_flip($this->alias)] + compact('permissions', 'roles');
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:328:    private 
+function getSerializedRoleRelation(Model $permission): array
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:330:        if (! 
+$permission->roles->count()) {
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:336:            
+$this->aliasModelFields($permission->roles[0]);
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:340:            
+'r' => $permission->roles->map(function ($role) {
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:350:    private 
+function getHydratedPermissionCollection(): Collection
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:352:        
+$permissionInstance = (new ($this->getPermissionClass())())->newInstance([], 
+true);
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:355:            
+fn ($item) => (clone $permissionInstance)
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:358:            
+$this->permissions['permissions']
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:377:        }, 
+$this->permissions['roles']);
+vendor\spatie\laravel-permission\src\PermissionRegistrar.php:379:        
+$this->permissions['roles'] = [];
+vendor\spatie\laravel-permission\src\PermissionServiceProvider.php:3:namespace 
+Spatie\Permission;
+vendor\spatie\laravel-permission\src\PermissionServiceProvider.php:17:use 
+Spatie\Permission\Contracts\Permission as PermissionContract;
+vendor\spatie\laravel-permission\src\PermissionServiceProvider.php:18:use 
+Spatie\Permission\Contracts\Role as RoleContract;
+vendor\spatie\laravel-permission\src\PermissionServiceProvider.php:22:class 
+PermissionServiceProvider extends PackageServiceProvider
+vendor\spatie\laravel-permission\src\PermissionServiceProvider.php:27:         
+   ->name('laravel-permission')
+vendor\spatie\laravel-permission\src\PermissionServiceProvider.php:28:         
+   ->hasConfigFile('permission')
+vendor\spatie\laravel-permission\src\PermissionServiceProvider.php:29:         
+   ->hasMigrations(['create_permission_tables'])
+vendor\spatie\laravel-permission\src\PermissionServiceProvider.php:33:         
+       Commands\CreatePermissionCommand::class,
+vendor\spatie\laravel-permission\src\PermissionServiceProvider.php:52:         
+   if 
+($this->app['config']->get('permission.register_permission_check_method')) {
+vendor\spatie\laravel-permission\src\PermissionServiceProvider.php:53:         
+       $permissionLoader = $app->get(PermissionRegistrar::class);
+vendor\spatie\laravel-permission\src\PermissionServiceProvider.php:54:         
+       $permissionLoader->clearPermissionsCollection();
+vendor\spatie\laravel-permission\src\PermissionServiceProvider.php:55:         
+       $permissionLoader->registerPermissions($gate);
+vendor\spatie\laravel-permission\src\PermissionServiceProvider.php:59:        
+$this->app->singleton(PermissionRegistrar::class);
+vendor\spatie\laravel-permission\src\PermissionServiceProvider.php:70:        
+$bladeMethodWrapper = 
+'\\Spatie\\Permission\\PermissionServiceProvider::bladeMethodWrapper';
+vendor\spatie\laravel-permission\src\PermissionServiceProvider.php:72:        
+// permission checks
+vendor\spatie\laravel-permission\src\PermissionServiceProvider.php:73:        
+$bladeCompiler->if('haspermission', fn () => 
+$bladeMethodWrapper('checkPermissionTo', ...func_get_args()));
+vendor\spatie\laravel-permission\src\PermissionServiceProvider.php:86:        
+$this->app->bind(PermissionContract::class, fn ($app) => 
+$app->make($app->config['permission.models.permission']));
+vendor\spatie\laravel-permission\src\PermissionServiceProvider.php:87:        
+$this->app->bind(RoleContract::class, fn ($app) => 
+$app->make($app->config['permission.models.role']));
+vendor\spatie\laravel-permission\src\PermissionServiceProvider.php:100:        
+Route::macro('permission', function ($permissions = []) {
+vendor\spatie\laravel-permission\src\PermissionServiceProvider.php:101:        
+    $permissions = Arr::wrap($permissions);
+vendor\spatie\laravel-permission\src\PermissionServiceProvider.php:102:        
+    $permissions = array_map(fn ($permission) => enum_value($permission), 
+$permissions);
+vendor\spatie\laravel-permission\src\PermissionServiceProvider.php:105:        
+    return $this->middleware('permission:'.implode('|', $permissions));
+vendor\spatie\laravel-permission\src\PermissionServiceProvider.php:108:        
+Route::macro('roleOrPermission', function ($rolesOrPermissions = []) {
+vendor\spatie\laravel-permission\src\PermissionServiceProvider.php:109:        
+    $rolesOrPermissions = Arr::wrap($rolesOrPermissions);
+vendor\spatie\laravel-permission\src\PermissionServiceProvider.php:110:        
+    $rolesOrPermissions = array_map(fn ($item) => enum_value($item), 
+$rolesOrPermissions);
+vendor\spatie\laravel-permission\src\PermissionServiceProvider.php:113:        
+    return $this->middleware('role_or_permission:'.implode('|', 
+$rolesOrPermissions));
+vendor\spatie\laravel-permission\src\PermissionServiceProvider.php:127:        
+    
+$event->sandbox->make(PermissionRegistrar::class)->setPermissionsTeamId(null);
+vendor\spatie\laravel-permission\src\PermissionServiceProvider.php:130:        
+if (! $this->app['config']->get('permission.register_octane_reset_listener')) {
+vendor\spatie\laravel-permission\src\PermissionServiceProvider.php:136:        
+    $event->sandbox->make(PermissionRegistrar::class)->clearPermissionsCollecti
+on();
+vendor\spatie\laravel-permission\src\PermissionServiceProvider.php:149:        
+    'Wildcard-Permissions' => 'enable_wildcard_permission',
+vendor\spatie\laravel-permission\src\PermissionServiceProvider.php:156:        
+AboutCommand::add('Spatie Permissions', static fn () => [
+vendor\spatie\laravel-permission\src\PermissionServiceProvider.php:158:        
+        ->filter(fn (string $feature, string $name): bool => 
+$config->get("permission.{$feature}"))
+vendor\spatie\laravel-permission\src\PermissionServiceProvider.php:162:        
+    'Version' => 
+InstalledVersions::getPrettyVersion('spatie/laravel-permission'),
+vendor\spatie\laravel-permission\src\WildcardPermission.php:3:namespace 
+Spatie\Permission;
+vendor\spatie\laravel-permission\src\WildcardPermission.php:7:use 
+Spatie\Permission\Contracts\Wildcard;
+vendor\spatie\laravel-permission\src\WildcardPermission.php:8:use 
+Spatie\Permission\Exceptions\WildcardPermissionNotProperlyFormatted;
+vendor\spatie\laravel-permission\src\WildcardPermission.php:10:class 
+WildcardPermission implements Wildcard
+vendor\spatie\laravel-permission\src\WildcardPermission.php:27:        foreach 
+($this->record->getAllPermissions() as $permission) {
+vendor\spatie\laravel-permission\src\WildcardPermission.php:28:            
+$index[$permission->guard_name] = $this->buildIndex(
+vendor\spatie\laravel-permission\src\WildcardPermission.php:29:                
+$index[$permission->guard_name] ?? [],
+vendor\spatie\laravel-permission\src\WildcardPermission.php:30:                
+explode(static::PART_DELIMITER, $permission->name),
+vendor\spatie\laravel-permission\src\WildcardPermission.php:31:                
+$permission->name,
+vendor\spatie\laravel-permission\src\WildcardPermission.php:38:    protected 
+function buildIndex(array $index, array $parts, string $permission): array
+vendor\spatie\laravel-permission\src\WildcardPermission.php:49:            
+throw WildcardPermissionNotProperlyFormatted::create($permission);
+vendor\spatie\laravel-permission\src\WildcardPermission.php:56:                
+$permission,
+vendor\spatie\laravel-permission\src\WildcardPermission.php:64:                
+throw WildcardPermissionNotProperlyFormatted::create($permission);
+vendor\spatie\laravel-permission\src\WildcardPermission.php:70:                
+$permission,
+vendor\spatie\laravel-permission\src\WildcardPermission.php:77:    public 
+function implies(string $permission, string $guardName, array $index): bool
+vendor\spatie\laravel-permission\src\WildcardPermission.php:83:        
+$permission = explode(static::PART_DELIMITER, $permission);
+vendor\spatie\laravel-permission\src\WildcardPermission.php:85:        return 
+$this->checkIndex($permission, $index[$guardName]);
+vendor\spatie\laravel-permission\src\WildcardPermission.php:88:    protected 
+function checkIndex(array $permission, array $index): bool
+vendor\spatie\laravel-permission\src\WildcardPermission.php:94:        if 
+(empty($permission)) {
+vendor\spatie\laravel-permission\src\WildcardPermission.php:98:        
+$firstPermission = array_shift($permission);
+vendor\spatie\laravel-permission\src\WildcardPermission.php:101:            
+array_key_exists($firstPermission, $index) &&
+vendor\spatie\laravel-permission\src\WildcardPermission.php:102:            
+$this->checkIndex($permission, $index[$firstPermission])
+vendor\spatie\laravel-permission\src\WildcardPermission.php:108:            
+return $this->checkIndex($permission, $index[static::WILDCARD_TOKEN]);
+vendor\spatie\laravel-permission\src\Commands\AssignRoleCommand.php:3:namespace
+ Spatie\Permission\Commands;
+vendor\spatie\laravel-permission\src\Commands\AssignRoleCommand.php:6:use 
+Spatie\Permission\Contracts\Role as RoleContract;
+vendor\spatie\laravel-permission\src\Commands\AssignRoleCommand.php:7:use 
+Spatie\Permission\PermissionRegistrar;
+vendor\spatie\laravel-permission\src\Commands\AssignRoleCommand.php:11:    
+protected $signature = 'permission:assign-role
+vendor\spatie\laravel-permission\src\Commands\AssignRoleCommand.php:20:    
+public function handle(PermissionRegistrar $permissionRegistrar): int
+vendor\spatie\laravel-permission\src\Commands\AssignRoleCommand.php:27:        
+if (! $permissionRegistrar->teams && $this->option('team-id')) {
+vendor\spatie\laravel-permission\src\Commands\AssignRoleCommand.php:28:        
+    $this->warn('Teams feature disabled, argument --team-id has no effect. 
+Either enable it in permissions config file or remove --team-id parameter');
+vendor\spatie\laravel-permission\src\Commands\AssignRoleCommand.php:48:        
+$teamIdAux = getPermissionsTeamId();
+vendor\spatie\laravel-permission\src\Commands\AssignRoleCommand.php:49:        
+setPermissionsTeamId($this->option('team-id') ?: null);
+vendor\spatie\laravel-permission\src\Commands\AssignRoleCommand.php:51:        
+/** @var \Spatie\Permission\Contracts\Role $roleClass */
+vendor\spatie\laravel-permission\src\Commands\AssignRoleCommand.php:58:        
+setPermissionsTeamId($teamIdAux);
+vendor\spatie\laravel-permission\src\Commands\CacheResetCommand.php:3:namespace
+ Spatie\Permission\Commands;
+vendor\spatie\laravel-permission\src\Commands\CacheResetCommand.php:6:use 
+Spatie\Permission\PermissionRegistrar;
+vendor\spatie\laravel-permission\src\Commands\CacheResetCommand.php:10:    
+protected $signature = 'permission:cache-reset';
+vendor\spatie\laravel-permission\src\Commands\CacheResetCommand.php:12:    
+protected $description = 'Reset the permission cache';
+vendor\spatie\laravel-permission\src\Commands\CacheResetCommand.php:16:        
+$permissionRegistrar = app(PermissionRegistrar::class);
+vendor\spatie\laravel-permission\src\Commands\CacheResetCommand.php:17:        
+$cacheExists = $permissionRegistrar->getCacheRepository()->has($permissionRegis
+trar->cacheKey);
+vendor\spatie\laravel-permission\src\Commands\CacheResetCommand.php:19:        
+if ($permissionRegistrar->forgetCachedPermissions()) {
+vendor\spatie\laravel-permission\src\Commands\CacheResetCommand.php:20:        
+    $this->info('Permission cache flushed.');
+vendor\spatie\laravel-permission\src\Commands\CreatePermissionCommand.php:3:nam
+espace Spatie\Permission\Commands;
+vendor\spatie\laravel-permission\src\Commands\CreatePermissionCommand.php:6:use
+ Spatie\Permission\Contracts\Permission as PermissionContract;
+vendor\spatie\laravel-permission\src\Commands\CreatePermissionCommand.php:8:cla
+ss CreatePermissionCommand extends Command
+vendor\spatie\laravel-permission\src\Commands\CreatePermissionCommand.php:10:  
+  protected $signature = 'permission:create-permission
+vendor\spatie\laravel-permission\src\Commands\CreatePermissionCommand.php:11:  
+              {name : The name of the permission}
+vendor\spatie\laravel-permission\src\Commands\CreatePermissionCommand.php:14:  
+  protected $description = 'Create a permission';
+vendor\spatie\laravel-permission\src\Commands\CreatePermissionCommand.php:18:  
+      $permissionClass = app(PermissionContract::class);
+vendor\spatie\laravel-permission\src\Commands\CreatePermissionCommand.php:20:  
+      $permission = $permissionClass::findOrCreate($this->argument('name'), 
+$this->argument('guard'));
+vendor\spatie\laravel-permission\src\Commands\CreatePermissionCommand.php:22:  
+      $this->info("Permission `{$permission->name}` 
+".($permission->wasRecentlyCreated ? 'created' : 'already exists'));
+vendor\spatie\laravel-permission\src\Commands\CreateRoleCommand.php:3:namespace
+ Spatie\Permission\Commands;
+vendor\spatie\laravel-permission\src\Commands\CreateRoleCommand.php:7:use 
+Spatie\Permission\Contracts\Permission as PermissionContract;
+vendor\spatie\laravel-permission\src\Commands\CreateRoleCommand.php:8:use 
+Spatie\Permission\Contracts\Role as RoleContract;
+vendor\spatie\laravel-permission\src\Commands\CreateRoleCommand.php:9:use 
+Spatie\Permission\PermissionRegistrar;
+vendor\spatie\laravel-permission\src\Commands\CreateRoleCommand.php:13:    
+protected $signature = 'permission:create-role
+vendor\spatie\laravel-permission\src\Commands\CreateRoleCommand.php:16:        
+{permissions? : A list of permissions to assign to the role, separated by | }
+vendor\spatie\laravel-permission\src\Commands\CreateRoleCommand.php:21:    
+public function handle(PermissionRegistrar $permissionRegistrar): int
+vendor\spatie\laravel-permission\src\Commands\CreateRoleCommand.php:25:        
+$teamIdAux = getPermissionsTeamId();
+vendor\spatie\laravel-permission\src\Commands\CreateRoleCommand.php:26:        
+setPermissionsTeamId($this->option('team-id') ?: null);
+vendor\spatie\laravel-permission\src\Commands\CreateRoleCommand.php:28:        
+if (! $permissionRegistrar->teams && $this->option('team-id')) {
+vendor\spatie\laravel-permission\src\Commands\CreateRoleCommand.php:29:        
+    $this->warn('Teams feature disabled, argument --team-id has no effect. 
+Either enable it in permissions config file or remove --team-id parameter');
+vendor\spatie\laravel-permission\src\Commands\CreateRoleCommand.php:35:        
+setPermissionsTeamId($teamIdAux);
+vendor\spatie\laravel-permission\src\Commands\CreateRoleCommand.php:37:        
+$teams_key = $permissionRegistrar->teamsKey;
+vendor\spatie\laravel-permission\src\Commands\CreateRoleCommand.php:38:        
+if ($permissionRegistrar->teams && $this->option('team-id') && 
+is_null($role->$teams_key)) {
+vendor\spatie\laravel-permission\src\Commands\CreateRoleCommand.php:42:        
+$role->givePermissionTo($this->makePermissions($this->argument('permissions')))
+;
+vendor\spatie\laravel-permission\src\Commands\CreateRoleCommand.php:49:    
+protected function makePermissions(?string $string = null): ?Collection
+vendor\spatie\laravel-permission\src\Commands\CreateRoleCommand.php:55:        
+$permissionClass = app(PermissionContract::class);
+vendor\spatie\laravel-permission\src\Commands\CreateRoleCommand.php:57:        
+$permissions = explode('|', $string);
+vendor\spatie\laravel-permission\src\Commands\CreateRoleCommand.php:61:        
+foreach ($permissions as $permission) {
+vendor\spatie\laravel-permission\src\Commands\CreateRoleCommand.php:62:        
+    $models[] = $permissionClass::findOrCreate(trim($permission), 
+$this->argument('guard'));
+vendor\spatie\laravel-permission\src\Commands\ShowCommand.php:3:namespace 
+Spatie\Permission\Commands;
+vendor\spatie\laravel-permission\src\Commands\ShowCommand.php:7:use 
+Spatie\Permission\Contracts\Permission as PermissionContract;
+vendor\spatie\laravel-permission\src\Commands\ShowCommand.php:8:use 
+Spatie\Permission\Contracts\Role as RoleContract;
+vendor\spatie\laravel-permission\src\Commands\ShowCommand.php:13:    protected 
+$signature = 'permission:show
+vendor\spatie\laravel-permission\src\Commands\ShowCommand.php:17:    protected 
+$description = 'Show a table of roles and permissions per guard';
+vendor\spatie\laravel-permission\src\Commands\ShowCommand.php:21:        
+$permissionClass = app(PermissionContract::class);
+vendor\spatie\laravel-permission\src\Commands\ShowCommand.php:23:        
+$teamsEnabled = config('permission.teams');
+vendor\spatie\laravel-permission\src\Commands\ShowCommand.php:24:        
+$team_key = config('permission.column_names.team_foreign_key');
+vendor\spatie\laravel-permission\src\Commands\ShowCommand.php:32:            
+$guards = $permissionClass::pluck('guard_name')->merge($roleClass::pluck('guard
+_name'))->unique();
+vendor\spatie\laravel-permission\src\Commands\ShowCommand.php:39:              
+  ->with('permissions')
+vendor\spatie\laravel-permission\src\Commands\ShowCommand.php:43:              
+          'permissions' => 
+$role->permissions->pluck($permissionClass->getKeyName()),
+vendor\spatie\laravel-permission\src\Commands\ShowCommand.php:48:            
+$permissions = 
+$permissionClass::whereGuardName($guard)->orderBy('name')->pluck('name', 
+$permissionClass->getKeyName());
+vendor\spatie\laravel-permission\src\Commands\ShowCommand.php:50:            
+$body = $permissions->map(fn ($permission, $id) => $roles->map(
+vendor\spatie\laravel-permission\src\Commands\ShowCommand.php:51:              
+  fn (array $role_data) => $role_data['permissions']->contains($id) ? ' ✔' : ' 
+·'
+vendor\spatie\laravel-permission\src\Commands\ShowCommand.php:52:            
+)->prepend($permission)
+vendor\spatie\laravel-permission\src\Commands\UpgradeForTeamsCommand.php:3:name
+space Spatie\Permission\Commands;
+vendor\spatie\laravel-permission\src\Commands\UpgradeForTeamsCommand.php:10:   
+ protected $signature = 'permission:setup-teams';
+vendor\spatie\laravel-permission\src\Commands\UpgradeForTeamsCommand.php:18:   
+     if (! Config::get('permission.teams')) {
+vendor\spatie\laravel-permission\src\Commands\UpgradeForTeamsCommand.php:19:   
+         $this->error('Teams feature is disabled in your permission.php 
+file.');
+vendor\spatie\laravel-permission\src\Commands\UpgradeForTeamsCommand.php:51:   
+             'Check the write permissions within the database/migrations 
+directory.'
+vendor\spatie\laravel-permission\src\Contracts\Permission.php:3:namespace 
+Spatie\Permission\Contracts;
+vendor\spatie\laravel-permission\src\Contracts\Permission.php:12: * @mixin 
+\Spatie\Permission\Models\Permission
+vendor\spatie\laravel-permission\src\Contracts\Permission.php:14: * 
+@phpstan-require-extends \Spatie\Permission\Models\Permission
+vendor\spatie\laravel-permission\src\Contracts\Permission.php:16:interface 
+Permission
+vendor\spatie\laravel-permission\src\Contracts\Permission.php:19:     * A 
+permission can be applied to roles.
+vendor\spatie\laravel-permission\src\Contracts\Permission.php:24:     * Find a 
+permission by its name.
+vendor\spatie\laravel-permission\src\Contracts\Permission.php:27:     * 
+@throws \Spatie\Permission\Exceptions\PermissionDoesNotExist
+vendor\spatie\laravel-permission\src\Contracts\Permission.php:32:     * Find a 
+permission by its id.
+vendor\spatie\laravel-permission\src\Contracts\Permission.php:35:     * 
+@throws \Spatie\Permission\Exceptions\PermissionDoesNotExist
+vendor\spatie\laravel-permission\src\Contracts\Permission.php:40:     * Find 
+or Create a permission by its name and guard name.
+vendor\spatie\laravel-permission\src\Contracts\PermissionsTeamResolver.php:3:na
+mespace Spatie\Permission\Contracts;
+vendor\spatie\laravel-permission\src\Contracts\PermissionsTeamResolver.php:7:in
+terface PermissionsTeamResolver
+vendor\spatie\laravel-permission\src\Contracts\PermissionsTeamResolver.php:9:  
+  public function getPermissionsTeamId(): int|string|null;
+vendor\spatie\laravel-permission\src\Contracts\PermissionsTeamResolver.php:11: 
+   public function setPermissionsTeamId(int|string|Model|null $id): void;
+vendor\spatie\laravel-permission\src\Contracts\Role.php:3:namespace 
+Spatie\Permission\Contracts;
+vendor\spatie\laravel-permission\src\Contracts\Role.php:13: * @mixin 
+\Spatie\Permission\Models\Role
+vendor\spatie\laravel-permission\src\Contracts\Role.php:15: * 
+@phpstan-require-extends \Spatie\Permission\Models\Role
+vendor\spatie\laravel-permission\src\Contracts\Role.php:20:     * A role may 
+be given various permissions.
+vendor\spatie\laravel-permission\src\Contracts\Role.php:22:    public function 
+permissions(): BelongsToMany;
+vendor\spatie\laravel-permission\src\Contracts\Role.php:28:     * @throws 
+\Spatie\Permission\Exceptions\RoleDoesNotExist
+vendor\spatie\laravel-permission\src\Contracts\Role.php:36:     * @throws 
+\Spatie\Permission\Exceptions\RoleDoesNotExist
+vendor\spatie\laravel-permission\src\Contracts\Role.php:46:     * Determine if 
+the user may perform the given permission.
+vendor\spatie\laravel-permission\src\Contracts\Role.php:48:    public function 
+hasPermissionTo(string|int|Permission|BackedEnum $permission, ?string 
+$guardName = null): bool;
+vendor\spatie\laravel-permission\src\Contracts\Wildcard.php:3:namespace 
+Spatie\Permission\Contracts;
+vendor\spatie\laravel-permission\src\Contracts\Wildcard.php:9:    public 
+function implies(string $permission, string $guardName, array $index): bool;
+vendor\spatie\laravel-permission\src\Events\PermissionAttachedEvent.php:5:names
+pace Spatie\Permission\Events;
+vendor\spatie\laravel-permission\src\Events\PermissionAttachedEvent.php:12:use 
+Spatie\Permission\Contracts\Permission;
+vendor\spatie\laravel-permission\src\Events\PermissionAttachedEvent.php:14:clas
+s PermissionAttachedEvent
+vendor\spatie\laravel-permission\src\Events\PermissionAttachedEvent.php:21:    
+ * Internally the HasPermissions trait passes an array of permission ids (eg: 
+int's or uuid's)
+vendor\spatie\laravel-permission\src\Events\PermissionAttachedEvent.php:23:    
+ * So a Listener should inspect the type of $permissionsOrIds received before 
+using.
+vendor\spatie\laravel-permission\src\Events\PermissionAttachedEvent.php:25:    
+ * @param  array|int[]|string[]|Permission|Permission[]|Collection  
+$permissionsOrIds
+vendor\spatie\laravel-permission\src\Events\PermissionAttachedEvent.php:27:    
+public function __construct(public Model $model, public mixed 
+$permissionsOrIds) {}
+vendor\spatie\laravel-permission\src\Events\PermissionDetachedEvent.php:5:names
+pace Spatie\Permission\Events;
+vendor\spatie\laravel-permission\src\Events\PermissionDetachedEvent.php:12:use 
+Spatie\Permission\Contracts\Permission;
+vendor\spatie\laravel-permission\src\Events\PermissionDetachedEvent.php:14:clas
+s PermissionDetachedEvent
+vendor\spatie\laravel-permission\src\Events\PermissionDetachedEvent.php:21:    
+ * Internally the HasPermissions trait passes $permissionsOrIds as an Eloquent 
+record.
+vendor\spatie\laravel-permission\src\Events\PermissionDetachedEvent.php:23:    
+ * So a Listener should inspect the type of $permissionsOrIds received before 
+using.
+vendor\spatie\laravel-permission\src\Events\PermissionDetachedEvent.php:25:    
+ * @param  array|int[]|string[]|Permission|Permission[]|Collection  
+$permissionsOrIds
+vendor\spatie\laravel-permission\src\Events\PermissionDetachedEvent.php:27:    
+public function __construct(public Model $model, public mixed 
+$permissionsOrIds) {}
+vendor\spatie\laravel-permission\src\Events\RoleAttachedEvent.php:5:namespace 
+Spatie\Permission\Events;
+vendor\spatie\laravel-permission\src\Events\RoleAttachedEvent.php:12:use 
+Spatie\Permission\Contracts\Role;
+vendor\spatie\laravel-permission\src\Events\RoleDetachedEvent.php:5:namespace 
+Spatie\Permission\Events;
+vendor\spatie\laravel-permission\src\Events\RoleDetachedEvent.php:12:use 
+Spatie\Permission\Contracts\Role;
+vendor\spatie\laravel-permission\src\Exceptions\GuardDoesNotMatch.php:3:namespa
+ce Spatie\Permission\Exceptions;
+vendor\spatie\laravel-permission\src\Exceptions\GuardDoesNotMatch.php:12:      
+  return new static(__('The given role or permission should use guard 
+`:expected` instead of `:given`.', [
+vendor\spatie\laravel-permission\src\Exceptions\PermissionAlreadyExists.php:3:n
+amespace Spatie\Permission\Exceptions;
+vendor\spatie\laravel-permission\src\Exceptions\PermissionAlreadyExists.php:7:c
+lass PermissionAlreadyExists extends InvalidArgumentException
+vendor\spatie\laravel-permission\src\Exceptions\PermissionAlreadyExists.php:9: 
+   public static function create(string $permissionName, string $guardName): 
+static
+vendor\spatie\laravel-permission\src\Exceptions\PermissionAlreadyExists.php:11:
+        return new static(__('A `:permission` permission already exists for 
+guard `:guard`.', [
+vendor\spatie\laravel-permission\src\Exceptions\PermissionAlreadyExists.php:12:
+            'permission' => $permissionName,
+vendor\spatie\laravel-permission\src\Exceptions\PermissionDoesNotExist.php:3:na
+mespace Spatie\Permission\Exceptions;
+vendor\spatie\laravel-permission\src\Exceptions\PermissionDoesNotExist.php:7:cl
+ass PermissionDoesNotExist extends InvalidArgumentException
+vendor\spatie\laravel-permission\src\Exceptions\PermissionDoesNotExist.php:9:  
+  public static function create(string $permissionName, ?string $guardName): 
+static
+vendor\spatie\laravel-permission\src\Exceptions\PermissionDoesNotExist.php:11: 
+       return new static(__('There is no permission named `:permission` for 
+guard `:guard`.', [
+vendor\spatie\laravel-permission\src\Exceptions\PermissionDoesNotExist.php:12: 
+           'permission' => $permissionName,
+vendor\spatie\laravel-permission\src\Exceptions\PermissionDoesNotExist.php:17: 
+   public static function withId(int|string $permissionId, ?string 
+$guardName): static
+vendor\spatie\laravel-permission\src\Exceptions\PermissionDoesNotExist.php:19: 
+       return new static(__('There is no [permission] with ID `:id` for guard 
+`:guard`.', [
+vendor\spatie\laravel-permission\src\Exceptions\PermissionDoesNotExist.php:20: 
+           'id' => $permissionId,
+vendor\spatie\laravel-permission\src\Exceptions\RoleAlreadyExists.php:3:namespa
+ce Spatie\Permission\Exceptions;
+vendor\spatie\laravel-permission\src\Exceptions\RoleDoesNotExist.php:3:namespac
+e Spatie\Permission\Exceptions;
+vendor\spatie\laravel-permission\src\Exceptions\UnauthorizedException.php:3:nam
+espace Spatie\Permission\Exceptions;
+vendor\spatie\laravel-permission\src\Exceptions\UnauthorizedException.php:12:  
+  private array $requiredPermissions = [];
+vendor\spatie\laravel-permission\src\Exceptions\UnauthorizedException.php:18:  
+      if (config('permission.display_role_in_exception')) {
+vendor\spatie\laravel-permission\src\Exceptions\UnauthorizedException.php:28:  
+  public static function forPermissions(array $permissions): static
+vendor\spatie\laravel-permission\src\Exceptions\UnauthorizedException.php:30:  
+      $message = __('User does not have the right permissions.');
+vendor\spatie\laravel-permission\src\Exceptions\UnauthorizedException.php:32:  
+      if (config('permission.display_permission_in_exception')) {
+vendor\spatie\laravel-permission\src\Exceptions\UnauthorizedException.php:33:  
+          $message .= ' '.__('Necessary permissions are :permissions', 
+['permissions' => implode(', ', $permissions)]);
+vendor\spatie\laravel-permission\src\Exceptions\UnauthorizedException.php:37:  
+      $exception->requiredPermissions = $permissions;
+vendor\spatie\laravel-permission\src\Exceptions\UnauthorizedException.php:42:  
+  public static function forRolesOrPermissions(array $rolesOrPermissions): 
+static
+vendor\spatie\laravel-permission\src\Exceptions\UnauthorizedException.php:46:  
+      if (config('permission.display_permission_in_exception') && 
+config('permission.display_role_in_exception')) {
+vendor\spatie\laravel-permission\src\Exceptions\UnauthorizedException.php:47:  
+          $message .= ' '.__('Necessary roles or permissions are :values', 
+['values' => implode(', ', $rolesOrPermissions)]);
+vendor\spatie\laravel-permission\src\Exceptions\UnauthorizedException.php:51:  
+      $exception->requiredPermissions = $rolesOrPermissions;
+vendor\spatie\laravel-permission\src\Exceptions\UnauthorizedException.php:58:  
+      return new static(403, __('Authorizable class `:class` must use 
+Spatie\\Permission\\Traits\\HasRoles trait.', [
+vendor\spatie\laravel-permission\src\Exceptions\UnauthorizedException.php:73:  
+  public function getRequiredPermissions(): array
+vendor\spatie\laravel-permission\src\Exceptions\UnauthorizedException.php:75:  
+      return $this->requiredPermissions;
+vendor\spatie\laravel-permission\src\Exceptions\WildcardPermissionInvalidArgume
+nt.php:3:namespace Spatie\Permission\Exceptions;
+vendor\spatie\laravel-permission\src\Exceptions\WildcardPermissionInvalidArgume
+nt.php:7:class WildcardPermissionInvalidArgument extends 
+InvalidArgumentException
+vendor\spatie\laravel-permission\src\Exceptions\WildcardPermissionInvalidArgume
+nt.php:11:        return new static(__('Wildcard permission must be string, 
+permission id or permission instance'));
+vendor\spatie\laravel-permission\src\Exceptions\WildcardPermissionNotImplements
+Contract.php:3:namespace Spatie\Permission\Exceptions;
+vendor\spatie\laravel-permission\src\Exceptions\WildcardPermissionNotImplements
+Contract.php:7:class WildcardPermissionNotImplementsContract extends 
+InvalidArgumentException
+vendor\spatie\laravel-permission\src\Exceptions\WildcardPermissionNotImplements
+Contract.php:11:        return new static(__('Wildcard permission class must 
+implement Spatie\\Permission\\Contracts\\Wildcard contract'));
+vendor\spatie\laravel-permission\src\Exceptions\WildcardPermissionNotProperlyFo
+rmatted.php:3:namespace Spatie\Permission\Exceptions;
+vendor\spatie\laravel-permission\src\Exceptions\WildcardPermissionNotProperlyFo
+rmatted.php:7:class WildcardPermissionNotProperlyFormatted extends 
+InvalidArgumentException
+vendor\spatie\laravel-permission\src\Exceptions\WildcardPermissionNotProperlyFo
+rmatted.php:9:    public static function create(string $permission): static
+vendor\spatie\laravel-permission\src\Exceptions\WildcardPermissionNotProperlyFo
+rmatted.php:11:        return new static(__('Wildcard permission `:permission` 
+is not properly formatted.', [
+vendor\spatie\laravel-permission\src\Exceptions\WildcardPermissionNotProperlyFo
+rmatted.php:12:            'permission' => $permission,
+vendor\spatie\laravel-permission\src\Middleware\PermissionMiddleware.php:3:name
+space Spatie\Permission\Middleware;
+vendor\spatie\laravel-permission\src\Middleware\PermissionMiddleware.php:9:use 
+Spatie\Permission\Exceptions\UnauthorizedException;
+vendor\spatie\laravel-permission\src\Middleware\PermissionMiddleware.php:10:use
+ Spatie\Permission\Guard;
+vendor\spatie\laravel-permission\src\Middleware\PermissionMiddleware.php:14:cla
+ss PermissionMiddleware
+vendor\spatie\laravel-permission\src\Middleware\PermissionMiddleware.php:16:   
+ public function handle(Request $request, Closure $next, $permission, ?string 
+$guard = null)
+vendor\spatie\laravel-permission\src\Middleware\PermissionMiddleware.php:23:   
+     if (! $user && $request->bearerToken() && 
+config('permission.use_passport_client_credentials')) {
+vendor\spatie\laravel-permission\src\Middleware\PermissionMiddleware.php:31:   
+     if (! method_exists($user, 'hasAnyPermission')) {
+vendor\spatie\laravel-permission\src\Middleware\PermissionMiddleware.php:35:   
+     $permissions = explode('|', self::parsePermissionsToString($permission));
+vendor\spatie\laravel-permission\src\Middleware\PermissionMiddleware.php:37:   
+     if (! $user->canAny($permissions)) {
+vendor\spatie\laravel-permission\src\Middleware\PermissionMiddleware.php:38:   
+         throw UnauthorizedException::forPermissions($permissions);
+vendor\spatie\laravel-permission\src\Middleware\PermissionMiddleware.php:45:   
+  * Specify the permission and guard for the middleware.
+vendor\spatie\laravel-permission\src\Middleware\PermissionMiddleware.php:47:   
+ public static function using(array|string|BackedEnum $permission, ?string 
+$guard = null): string
+vendor\spatie\laravel-permission\src\Middleware\PermissionMiddleware.php:49:   
+     $permissionString = 
+self::parsePermissionsToString(enum_value($permission));
+vendor\spatie\laravel-permission\src\Middleware\PermissionMiddleware.php:51:   
+     $args = is_null($guard) ? $permissionString : "$permissionString,$guard";
+vendor\spatie\laravel-permission\src\Middleware\PermissionMiddleware.php:56:   
+ protected static function parsePermissionsToString(array|string|BackedEnum 
+$permission): string
+vendor\spatie\laravel-permission\src\Middleware\PermissionMiddleware.php:58:   
+     $permission = enum_value($permission);
+vendor\spatie\laravel-permission\src\Middleware\PermissionMiddleware.php:60:   
+     if (is_array($permission)) {
+vendor\spatie\laravel-permission\src\Middleware\PermissionMiddleware.php:61:   
+         return implode('|', array_map(fn ($r) => enum_value($r), 
+$permission));
+vendor\spatie\laravel-permission\src\Middleware\PermissionMiddleware.php:64:   
+     return (string) $permission;
+vendor\spatie\laravel-permission\src\Middleware\RoleMiddleware.php:3:namespace 
+Spatie\Permission\Middleware;
+vendor\spatie\laravel-permission\src\Middleware\RoleMiddleware.php:9:use 
+Spatie\Permission\Exceptions\UnauthorizedException;
+vendor\spatie\laravel-permission\src\Middleware\RoleMiddleware.php:10:use 
+Spatie\Permission\Guard;
+vendor\spatie\laravel-permission\src\Middleware\RoleMiddleware.php:23:        
+if (! $user && $request->bearerToken() && 
+config('permission.use_passport_client_credentials')) {
+vendor\spatie\laravel-permission\src\Middleware\RoleOrPermissionMiddleware.php:
+3:namespace Spatie\Permission\Middleware;
+vendor\spatie\laravel-permission\src\Middleware\RoleOrPermissionMiddleware.php:
+9:use Spatie\Permission\Exceptions\UnauthorizedException;
+vendor\spatie\laravel-permission\src\Middleware\RoleOrPermissionMiddleware.php:
+10:use Spatie\Permission\Guard;
+vendor\spatie\laravel-permission\src\Middleware\RoleOrPermissionMiddleware.php:
+14:class RoleOrPermissionMiddleware
+vendor\spatie\laravel-permission\src\Middleware\RoleOrPermissionMiddleware.php:
+16:    public function handle(Request $request, Closure $next, 
+$roleOrPermission, ?string $guard = null)
+vendor\spatie\laravel-permission\src\Middleware\RoleOrPermissionMiddleware.php:
+23:        if (! $user && $request->bearerToken() && 
+config('permission.use_passport_client_credentials')) {
+vendor\spatie\laravel-permission\src\Middleware\RoleOrPermissionMiddleware.php:
+31:        if (! method_exists($user, 'hasAnyRole') || ! method_exists($user, 
+'hasAnyPermission')) {
+vendor\spatie\laravel-permission\src\Middleware\RoleOrPermissionMiddleware.php:
+35:        $rolesOrPermissions = explode('|', 
+self::parseRoleOrPermissionToString($roleOrPermission));
+vendor\spatie\laravel-permission\src\Middleware\RoleOrPermissionMiddleware.php:
+37:        if (! $user->canAny($rolesOrPermissions) && ! 
+$user->hasAnyRole($rolesOrPermissions)) {
+vendor\spatie\laravel-permission\src\Middleware\RoleOrPermissionMiddleware.php:
+38:            throw 
+UnauthorizedException::forRolesOrPermissions($rolesOrPermissions);
+vendor\spatie\laravel-permission\src\Middleware\RoleOrPermissionMiddleware.php:
+45:     * Specify the role or permission and guard for the middleware.
+vendor\spatie\laravel-permission\src\Middleware\RoleOrPermissionMiddleware.php:
+47:    public static function using(array|string|BackedEnum $roleOrPermission, 
+?string $guard = null): string
+vendor\spatie\laravel-permission\src\Middleware\RoleOrPermissionMiddleware.php:
+49:        $roleOrPermissionString = 
+self::parseRoleOrPermissionToString($roleOrPermission);
+vendor\spatie\laravel-permission\src\Middleware\RoleOrPermissionMiddleware.php:
+50:        $args = is_null($guard) ? $roleOrPermissionString : 
+"$roleOrPermissionString,$guard";
+vendor\spatie\laravel-permission\src\Middleware\RoleOrPermissionMiddleware.php:
+55:    protected static function 
+parseRoleOrPermissionToString(array|string|BackedEnum $roleOrPermission): 
+string
+vendor\spatie\laravel-permission\src\Middleware\RoleOrPermissionMiddleware.php:
+57:        $roleOrPermission = enum_value($roleOrPermission);
+vendor\spatie\laravel-permission\src\Middleware\RoleOrPermissionMiddleware.php:
+59:        if (is_array($roleOrPermission)) {
+vendor\spatie\laravel-permission\src\Middleware\RoleOrPermissionMiddleware.php:
+60:            return implode('|', array_map(fn ($r) => enum_value($r), 
+$roleOrPermission));
+vendor\spatie\laravel-permission\src\Middleware\RoleOrPermissionMiddleware.php:
+63:        return (string) $roleOrPermission;
+vendor\spatie\laravel-permission\src\Models\Permission.php:3:namespace 
+Spatie\Permission\Models;
+vendor\spatie\laravel-permission\src\Models\Permission.php:8:use 
+Spatie\Permission\Contracts\Permission as PermissionContract;
+vendor\spatie\laravel-permission\src\Models\Permission.php:9:use 
+Spatie\Permission\Exceptions\PermissionAlreadyExists;
+vendor\spatie\laravel-permission\src\Models\Permission.php:10:use 
+Spatie\Permission\Exceptions\PermissionDoesNotExist;
+vendor\spatie\laravel-permission\src\Models\Permission.php:11:use 
+Spatie\Permission\Guard;
+vendor\spatie\laravel-permission\src\Models\Permission.php:12:use 
+Spatie\Permission\PermissionRegistrar;
+vendor\spatie\laravel-permission\src\Models\Permission.php:13:use 
+Spatie\Permission\Traits\HasRoles;
+vendor\spatie\laravel-permission\src\Models\Permission.php:14:use 
+Spatie\Permission\Traits\RefreshesPermissionCache;
+vendor\spatie\laravel-permission\src\Models\Permission.php:22: * 
+@property-read \Illuminate\Database\Eloquent\Collection<int, 
+\Spatie\Permission\Models\Role> $roles
+vendor\spatie\laravel-permission\src\Models\Permission.php:25:class Permission 
+extends Model implements PermissionContract
+vendor\spatie\laravel-permission\src\Models\Permission.php:28:    use 
+RefreshesPermissionCache;
+vendor\spatie\laravel-permission\src\Models\Permission.php:39:        
+$this->table = config('permission.table_names.permissions') ?: 
+parent::getTable();
+vendor\spatie\laravel-permission\src\Models\Permission.php:43:     * @return 
+PermissionContract|Permission
+vendor\spatie\laravel-permission\src\Models\Permission.php:45:     * @throws 
+PermissionAlreadyExists
+vendor\spatie\laravel-permission\src\Models\Permission.php:51:        
+$permission = static::getPermission(['name' => $attributes['name'], 
+'guard_name' => $attributes['guard_name']]);
+vendor\spatie\laravel-permission\src\Models\Permission.php:53:        if 
+($permission) {
+vendor\spatie\laravel-permission\src\Models\Permission.php:54:            
+throw PermissionAlreadyExists::create($attributes['name'], 
+$attributes['guard_name']);
+vendor\spatie\laravel-permission\src\Models\Permission.php:61:     * A 
+permission can be applied to roles.
+vendor\spatie\laravel-permission\src\Models\Permission.php:65:        
+$registrar = app(PermissionRegistrar::class);
+vendor\spatie\laravel-permission\src\Models\Permission.php:68:            
+config('permission.models.role'),
+vendor\spatie\laravel-permission\src\Models\Permission.php:69:            
+config('permission.table_names.role_has_permissions'),
+vendor\spatie\laravel-permission\src\Models\Permission.php:70:            
+$registrar->pivotPermission,
+vendor\spatie\laravel-permission\src\Models\Permission.php:76:     * A 
+permission belongs to some users of the model associated with its guard.
+vendor\spatie\laravel-permission\src\Models\Permission.php:83:            
+config('permission.table_names.model_has_permissions'),
+vendor\spatie\laravel-permission\src\Models\Permission.php:84:            
+app(PermissionRegistrar::class)->pivotPermission,
+vendor\spatie\laravel-permission\src\Models\Permission.php:85:            
+config('permission.column_names.model_morph_key')
+vendor\spatie\laravel-permission\src\Models\Permission.php:90:     * Find a 
+permission by its name (and optionally guardName).
+vendor\spatie\laravel-permission\src\Models\Permission.php:92:     * @return 
+PermissionContract|Permission
+vendor\spatie\laravel-permission\src\Models\Permission.php:94:     * @throws 
+PermissionDoesNotExist
+vendor\spatie\laravel-permission\src\Models\Permission.php:96:    public 
+static function findByName(string $name, ?string $guardName = null): 
+PermissionContract
+vendor\spatie\laravel-permission\src\Models\Permission.php:99:        
+$permission = static::getPermission(['name' => $name, 'guard_name' => 
+$guardName]);
+vendor\spatie\laravel-permission\src\Models\Permission.php:100:        if (! 
+$permission) {
+vendor\spatie\laravel-permission\src\Models\Permission.php:101:            
+throw PermissionDoesNotExist::create($name, $guardName);
+vendor\spatie\laravel-permission\src\Models\Permission.php:104:        return 
+$permission;
+vendor\spatie\laravel-permission\src\Models\Permission.php:108:     * Find a 
+permission by its id (and optionally guardName).
+vendor\spatie\laravel-permission\src\Models\Permission.php:110:     * @return 
+PermissionContract|Permission
+vendor\spatie\laravel-permission\src\Models\Permission.php:112:     * @throws 
+PermissionDoesNotExist
+vendor\spatie\laravel-permission\src\Models\Permission.php:114:    public 
+static function findById(int|string $id, ?string $guardName = null): 
+PermissionContract
+vendor\spatie\laravel-permission\src\Models\Permission.php:117:        
+$permission = static::getPermission([(new static)->getKeyName() => $id, 
+'guard_name' => $guardName]);
+vendor\spatie\laravel-permission\src\Models\Permission.php:119:        if (! 
+$permission) {
+vendor\spatie\laravel-permission\src\Models\Permission.php:120:            
+throw PermissionDoesNotExist::withId($id, $guardName);
+vendor\spatie\laravel-permission\src\Models\Permission.php:123:        return 
+$permission;
+vendor\spatie\laravel-permission\src\Models\Permission.php:127:     * Find or 
+create permission by its name (and optionally guardName).
+vendor\spatie\laravel-permission\src\Models\Permission.php:129:     * @return 
+PermissionContract|Permission
+vendor\spatie\laravel-permission\src\Models\Permission.php:131:    public 
+static function findOrCreate(string $name, ?string $guardName = null): 
+PermissionContract
+vendor\spatie\laravel-permission\src\Models\Permission.php:134:        
+$permission = static::getPermission(['name' => $name, 'guard_name' => 
+$guardName]);
+vendor\spatie\laravel-permission\src\Models\Permission.php:136:        if (! 
+$permission) {
+vendor\spatie\laravel-permission\src\Models\Permission.php:140:        return 
+$permission;
+vendor\spatie\laravel-permission\src\Models\Permission.php:144:     * Get the 
+current cached permissions.
+vendor\spatie\laravel-permission\src\Models\Permission.php:146:    protected 
+static function getPermissions(array $params = [], bool $onlyOne = false): 
+Collection
+vendor\spatie\laravel-permission\src\Models\Permission.php:148:        return 
+app(PermissionRegistrar::class)
+vendor\spatie\laravel-permission\src\Models\Permission.php:149:            
+->setPermissionClass(static::class)
+vendor\spatie\laravel-permission\src\Models\Permission.php:150:            
+->getPermissions($params, $onlyOne);
+vendor\spatie\laravel-permission\src\Models\Permission.php:154:     * Get the 
+current cached first permission.
+vendor\spatie\laravel-permission\src\Models\Permission.php:156:     * @return 
+PermissionContract|Permission|null
+vendor\spatie\laravel-permission\src\Models\Permission.php:158:    protected 
+static function getPermission(array $params = []): ?PermissionContract
+vendor\spatie\laravel-permission\src\Models\Permission.php:160:        /** 
+@var PermissionContract|null */
+vendor\spatie\laravel-permission\src\Models\Permission.php:161:        return 
+static::getPermissions($params, true)->first();
+vendor\spatie\laravel-permission\src\Models\Role.php:3:namespace 
+Spatie\Permission\Models;
+vendor\spatie\laravel-permission\src\Models\Role.php:8:use 
+Spatie\Permission\Contracts\Role as RoleContract;
+vendor\spatie\laravel-permission\src\Models\Role.php:9:use 
+Spatie\Permission\Exceptions\GuardDoesNotMatch;
+vendor\spatie\laravel-permission\src\Models\Role.php:10:use 
+Spatie\Permission\Exceptions\PermissionDoesNotExist;
+vendor\spatie\laravel-permission\src\Models\Role.php:11:use 
+Spatie\Permission\Exceptions\RoleAlreadyExists;
+vendor\spatie\laravel-permission\src\Models\Role.php:12:use 
+Spatie\Permission\Exceptions\RoleDoesNotExist;
+vendor\spatie\laravel-permission\src\Models\Role.php:13:use 
+Spatie\Permission\Guard;
+vendor\spatie\laravel-permission\src\Models\Role.php:14:use 
+Spatie\Permission\PermissionRegistrar;
+vendor\spatie\laravel-permission\src\Models\Role.php:15:use 
+Spatie\Permission\Traits\HasPermissions;
+vendor\spatie\laravel-permission\src\Models\Role.php:16:use 
+Spatie\Permission\Traits\RefreshesPermissionCache;
+vendor\spatie\laravel-permission\src\Models\Role.php:24: * @property-read 
+\Illuminate\Database\Eloquent\Collection<int, 
+\Spatie\Permission\Models\Permission> $permissions
+vendor\spatie\laravel-permission\src\Models\Role.php:29:    use HasPermissions;
+vendor\spatie\laravel-permission\src\Models\Role.php:30:    use 
+RefreshesPermissionCache;
+vendor\spatie\laravel-permission\src\Models\Role.php:41:        $this->table = 
+config('permission.table_names.roles') ?: parent::getTable();
+vendor\spatie\laravel-permission\src\Models\Role.php:55:        $registrar = 
+app(PermissionRegistrar::class);
+vendor\spatie\laravel-permission\src\Models\Role.php:63:                
+$attributes[$teamsKey] = getPermissionsTeamId();
+vendor\spatie\laravel-permission\src\Models\Role.php:75:     * A role may be 
+given various permissions.
+vendor\spatie\laravel-permission\src\Models\Role.php:77:    public function 
+permissions(): BelongsToMany
+vendor\spatie\laravel-permission\src\Models\Role.php:79:        $registrar = 
+app(PermissionRegistrar::class);
+vendor\spatie\laravel-permission\src\Models\Role.php:82:            
+config('permission.models.permission'),
+vendor\spatie\laravel-permission\src\Models\Role.php:83:            
+config('permission.table_names.role_has_permissions'),
+vendor\spatie\laravel-permission\src\Models\Role.php:85:            
+$registrar->pivotPermission
+vendor\spatie\laravel-permission\src\Models\Role.php:97:            
+config('permission.table_names.model_has_roles'),
+vendor\spatie\laravel-permission\src\Models\Role.php:98:            
+app(PermissionRegistrar::class)->pivotRole,
+vendor\spatie\laravel-permission\src\Models\Role.php:99:            
+config('permission.column_names.model_morph_key')
+vendor\spatie\laravel-permission\src\Models\Role.php:155:            
+$registrar = app(PermissionRegistrar::class);
+vendor\spatie\laravel-permission\src\Models\Role.php:158:                
+$attributes[$teamsKey] = getPermissionsTeamId();
+vendor\spatie\laravel-permission\src\Models\Role.php:176:        $registrar = 
+app(PermissionRegistrar::class);
+vendor\spatie\laravel-permission\src\Models\Role.php:182:                
+->orWhere($teamsKey, $params[$teamsKey] ?? getPermissionsTeamId())
+vendor\spatie\laravel-permission\src\Models\Role.php:195:     * Determine if 
+the role may perform the given permission.
+vendor\spatie\laravel-permission\src\Models\Role.php:197:     * @param  
+string|int|\Spatie\Permission\Contracts\Permission|BackedEnum  $permission
+vendor\spatie\laravel-permission\src\Models\Role.php:199:     * @throws 
+PermissionDoesNotExist|GuardDoesNotMatch
+vendor\spatie\laravel-permission\src\Models\Role.php:201:    public function 
+hasPermissionTo($permission, ?string $guardName = null): bool
+vendor\spatie\laravel-permission\src\Models\Role.php:204:            return 
+$this->hasWildcardPermission($permission, $guardName);
+vendor\spatie\laravel-permission\src\Models\Role.php:207:        $permission = 
+$this->filterPermission($permission, $guardName);
+vendor\spatie\laravel-permission\src\Models\Role.php:209:        if (! 
+$this->getGuardNames()->contains($permission->guard_name)) {
+vendor\spatie\laravel-permission\src\Models\Role.php:210:            throw 
+GuardDoesNotMatch::create($permission->guard_name, $guardName ? 
+collect([$guardName]) : $this->getGuardNames());
+vendor\spatie\laravel-permission\src\Models\Role.php:213:        return 
+$this->loadMissing('permissions')->permissions
+vendor\spatie\laravel-permission\src\Models\Role.php:214:            
+->contains($permission->getKeyName(), $permission->getKey());
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:3:namespace 
+Spatie\Permission\Traits;
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:10:use 
+Spatie\Permission\Contracts\Permission;
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:11:use 
+Spatie\Permission\Contracts\Role;
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:12:use 
+Spatie\Permission\Contracts\Wildcard;
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:13:use 
+Spatie\Permission\Events\PermissionAttachedEvent;
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:14:use 
+Spatie\Permission\Events\PermissionDetachedEvent;
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:15:use 
+Spatie\Permission\Exceptions\GuardDoesNotMatch;
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:16:use 
+Spatie\Permission\Exceptions\PermissionDoesNotExist;
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:17:use 
+Spatie\Permission\Exceptions\WildcardPermissionInvalidArgument;
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:18:use 
+Spatie\Permission\Exceptions\WildcardPermissionNotImplementsContract;
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:19:use 
+Spatie\Permission\Guard;
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:20:use 
+Spatie\Permission\PermissionRegistrar;
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:21:use 
+Spatie\Permission\WildcardPermission;
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:25:trait 
+HasPermissions
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:27:    private 
+?string $permissionClass = null;
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:31:    private 
+array $wildcardPermissionsIndex;
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:33:    public 
+static function bootHasPermissions(): void
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:40:            
+$teams = app(PermissionRegistrar::class)->teams;
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:41:            
+app(PermissionRegistrar::class)->teams = false;
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:42:            
+if (! $model instanceof Permission) {
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:43:             
+   $model->permissions()->detach();
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:48:            
+app(PermissionRegistrar::class)->teams = $teams;
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:52:    public 
+function getPermissionClass(): string
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:54:        if 
+(! $this->permissionClass) {
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:55:            
+$this->permissionClass = app(PermissionRegistrar::class)->getPermissionClass();
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:58:        
+return $this->permissionClass;
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:69:        if 
+(config('permission.enable_wildcard_permission')) {
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:70:            
+$this->wildcardClass = config('permission.wildcard_permission', 
+WildcardPermission::class);
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:73:             
+   throw WildcardPermissionNotImplementsContract::create();
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:81:     * A 
+model may have multiple direct permissions.
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:83:    public 
+function permissions(): BelongsToMany
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:86:            
+config('permission.models.permission'),
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:88:            
+config('permission.table_names.model_has_permissions'),
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:89:            
+config('permission.column_names.model_morph_key'),
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:90:            
+app(PermissionRegistrar::class)->pivotPermission
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:93:        if 
+(! app(PermissionRegistrar::class)->teams) {
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:97:        
+$teamsKey = app(PermissionRegistrar::class)->teamsKey;
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:100:        
+return $relation->wherePivot($teamsKey, getPermissionsTeamId());
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:104:     * 
+Scope the model query to certain permissions only.
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:106:     * 
+@param  string|int|array|Permission|Collection|BackedEnum  $permissions
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:108:    public 
+function scopePermission(Builder $query, $permissions, bool $without = false): 
+Builder
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:110:        
+$permissions = $this->convertToPermissionModels($permissions);
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:112:        
+$permissionKey = (new ($this->getPermissionClass())())->getKeyName();
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:115:        
+$rolesWithPermissions = $this instanceof Role ? [] : array_unique(
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:116:            
+array_reduce($permissions, fn ($result, $permission) => array_merge($result, 
+$permission->roles->all()), [])
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:120:            
+->{! $without ? 'whereHas' : 'whereDoesntHave'}('permissions', fn (Builder 
+$subQuery) => $subQuery
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:121:            
+->whereIn(config('permission.table_names.permissions').".$permissionKey", 
+array_column($permissions, $permissionKey))
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:123:            
+->when(count($rolesWithPermissions), fn ($whenQuery) => $whenQuery
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:125:            
+    ->whereIn(config('permission.table_names.roles').".$roleKey", 
+array_column($rolesWithPermissions, $roleKey))
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:132:     * 
+Scope the model query to only those without certain permissions,
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:133:     * 
+whether indirectly by role or by direct permission.
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:135:     * 
+@param  string|int|array|Permission|Collection|BackedEnum  $permissions
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:137:    public 
+function scopeWithoutPermission(Builder $query, $permissions): Builder
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:139:        
+return $this->scopePermission($query, $permissions, true);
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:143:     * 
+@param  string|int|array|Permission|Collection|BackedEnum  $permissions
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:145:     * 
+@throws PermissionDoesNotExist
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:147:    
+protected function convertToPermissionModels($permissions): array
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:149:        if 
+($permissions instanceof Collection) {
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:150:            
+$permissions = $permissions->all();
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:153:        
+return array_map(function ($permission) {
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:154:            
+if ($permission instanceof Permission) {
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:155:            
+    return $permission;
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:158:            
+$permission = enum_value($permission);
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:160:            
+$method = is_int($permission) || PermissionRegistrar::isUid($permission) ? 
+'findById' : 'findByName';
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:162:            
+return $this->getPermissionClass()::{$method}($permission, 
+$this->getDefaultGuardName());
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:163:        }, 
+Arr::wrap($permissions));
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:167:     * Find 
+a permission.
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:169:     * 
+@param  string|int|Permission|BackedEnum  $permission
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:171:     * 
+@throws PermissionDoesNotExist
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:173:    public 
+function filterPermission($permission, ?string $guardName = null): Permission
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:175:        
+$permission = enum_value($permission);
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:177:        if 
+(is_int($permission) || PermissionRegistrar::isUid($permission)) {
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:178:            
+$permission = $this->getPermissionClass()::findById(
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:179:            
+    $permission,
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:184:        if 
+(is_string($permission)) {
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:185:            
+$permission = $this->getPermissionClass()::findByName(
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:186:            
+    $permission,
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:191:        if 
+(! $permission instanceof Permission) {
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:192:            
+throw new PermissionDoesNotExist;
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:195:        
+return $permission;
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:199:     * 
+Determine if the model may perform the given permission.
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:201:     * 
+@param  string|int|Permission|BackedEnum  $permission
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:203:     * 
+@throws PermissionDoesNotExist
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:205:    public 
+function hasPermissionTo($permission, ?string $guardName = null): bool
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:208:            
+return $this->hasWildcardPermission($permission, $guardName);
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:211:        
+$permission = $this->filterPermission($permission, $guardName);
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:213:        
+return $this->hasDirectPermission($permission) || 
+$this->hasPermissionViaRole($permission);
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:217:     * 
+Validates a wildcard permission against all permissions of a user.
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:219:     * 
+@param  string|int|Permission|BackedEnum  $permission
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:221:    
+protected function hasWildcardPermission($permission, ?string $guardName = 
+null): bool
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:225:        
+$permission = enum_value($permission);
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:227:        if 
+(is_int($permission) || PermissionRegistrar::isUid($permission)) {
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:228:            
+$permission = $this->getPermissionClass()::findById($permission, $guardName);
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:231:        if 
+($permission instanceof Permission) {
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:232:            
+$guardName = $permission->guard_name ?? $guardName;
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:233:            
+$permission = $permission->name;
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:236:        if 
+(! is_string($permission)) {
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:237:            
+throw WildcardPermissionInvalidArgument::create();
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:241:            
+$permission,
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:243:            
+app(PermissionRegistrar::class)->getWildcardPermissionIndex($this),
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:248:     * An 
+alias to hasPermissionTo(), but avoids throwing an exception.
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:250:     * 
+@param  string|int|Permission|BackedEnum  $permission
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:252:    public 
+function checkPermissionTo($permission, ?string $guardName = null): bool
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:255:            
+return $this->hasPermissionTo($permission, $guardName);
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:256:        } 
+catch (PermissionDoesNotExist $e) {
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:262:     * 
+Determine if the model has any of the given permissions.
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:264:     * 
+@param  string|int|array|Permission|Collection|BackedEnum  ...$permissions
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:266:    public 
+function hasAnyPermission(...$permissions): bool
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:268:        
+$permissions = collect($permissions)->flatten();
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:270:        
+foreach ($permissions as $permission) {
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:271:            
+if ($this->checkPermissionTo($permission)) {
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:280:     * 
+Determine if the model has all of the given permissions.
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:282:     * 
+@param  string|int|array|Permission|Collection|BackedEnum  ...$permissions
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:284:    public 
+function hasAllPermissions(...$permissions): bool
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:286:        
+$permissions = collect($permissions)->flatten();
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:288:        
+foreach ($permissions as $permission) {
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:289:            
+if (! $this->checkPermissionTo($permission)) {
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:298:     * 
+Determine if the model has, via roles, the given permission.
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:300:    
+protected function hasPermissionViaRole(Permission $permission): bool
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:306:        
+return $this->hasRole($permission->roles);
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:310:     * 
+Determine if the model has the given permission.
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:312:     * 
+@param  string|int|Permission|BackedEnum  $permission
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:314:     * 
+@throws PermissionDoesNotExist
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:316:    public 
+function hasDirectPermission($permission): bool
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:318:        
+$permission = $this->filterPermission($permission);
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:320:        
+return $this->loadMissing('permissions')->permissions
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:321:            
+->contains($permission->getKeyName(), $permission->getKey());
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:325:     * 
+Return all the permissions the model has via roles.
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:327:    public 
+function getPermissionsViaRoles(): Collection
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:329:        if 
+($this instanceof Role || $this instanceof Permission) {
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:333:        
+return $this->loadMissing('roles', 'roles.permissions')
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:334:            
+->roles->flatMap(fn ($role) => $role->permissions)
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:339:     * 
+Return all the permissions the model has, both directly and via roles.
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:341:    public 
+function getAllPermissions(): Collection
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:343:        /** 
+@var Collection $permissions */
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:344:        
+$permissions = $this->permissions;
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:346:        if 
+(! $this instanceof Permission) {
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:347:            
+$permissions = $permissions->merge($this->getPermissionsViaRoles());
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:350:        
+return $permissions->sort()->values();
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:354:     * 
+Returns array of permissions ids
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:356:     * 
+@param  string|int|array|Permission|Collection|BackedEnum  $permissions
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:358:    private 
+function collectPermissions(...$permissions): array
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:360:        
+return collect($permissions)
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:362:            
+->reduce(function ($array, $permission) {
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:363:            
+    if ($permission === null || $permission === '') {
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:367:            
+    $permission = $this->getStoredPermission($permission);
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:368:            
+    if (! $permission instanceof Permission) {
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:372:            
+    if (! in_array($permission->getKey(), $array)) {
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:373:            
+        $this->ensureModelSharesGuard($permission);
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:374:            
+        $array[] = $permission->getKey();
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:382:     * 
+Grant the given permission(s) to a role.
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:384:     * 
+@param  string|int|array|Permission|Collection|BackedEnum  $permissions
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:387:    public 
+function givePermissionTo(...$permissions): static
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:389:        
+$permissions = $this->collectPermissions($permissions);
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:392:        
+$teamPivot = app(PermissionRegistrar::class)->teams && ! $this instanceof Role 
+?
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:393:            
+[app(PermissionRegistrar::class)->teamsKey => getPermissionsTeamId()] : [];
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:396:            
+$currentPermissions = $this->permissions->map(fn ($permission) => 
+$permission->getKey())->toArray();
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:398:            
+$this->permissions()->attach(array_diff($permissions, $currentPermissions), 
+$teamPivot);
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:399:            
+$model->unsetRelation('permissions');
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:405:            
+    function ($object) use ($permissions, $model, $teamPivot, &$saved) {
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:409:            
+        $model->permissions()->attach($permissions, $teamPivot);
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:410:            
+        $model->unsetRelation('permissions');
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:417:            
+$this->forgetCachedPermissions();
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:420:        if 
+(config('permission.events_enabled')) {
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:421:            
+event(new PermissionAttachedEvent($this->getModel(), $permissions));
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:424:        
+$this->forgetWildcardPermissionIndex();
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:429:    public 
+function forgetWildcardPermissionIndex(): void
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:431:        
+app(PermissionRegistrar::class)->forgetWildcardPermissionIndex(
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:437:     * 
+Remove all current permissions and set the given ones.
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:439:     * 
+@param  string|int|array|Permission|Collection|BackedEnum  $permissions
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:442:    public 
+function syncPermissions(...$permissions): static
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:445:            
+$this->collectPermissions($permissions);
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:446:            
+$this->permissions()->detach();
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:447:            
+$this->setRelation('permissions', collect());
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:450:        
+return $this->givePermissionTo($permissions);
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:454:     * 
+Revoke the given permission(s).
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:456:     * 
+@param  Permission|Permission[]|string|string[]|BackedEnum  $permission
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:459:    public 
+function revokePermissionTo($permission): static
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:461:        
+$storedPermission = $this->getStoredPermission($permission);
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:463:        
+$this->permissions()->detach($storedPermission);
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:466:            
+$this->forgetCachedPermissions();
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:469:        if 
+(config('permission.events_enabled')) {
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:470:            
+event(new PermissionDetachedEvent($this->getModel(), $storedPermission));
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:473:        
+$this->forgetWildcardPermissionIndex();
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:475:        
+$this->unsetRelation('permissions');
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:480:    public 
+function getPermissionNames(): Collection
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:482:        
+return $this->permissions->pluck('name');
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:486:     * 
+@param  string|int|array|Permission|Collection|BackedEnum  $permissions
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:487:     * 
+@return Permission|Permission[]|Collection
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:489:    
+protected function getStoredPermission($permissions)
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:491:        
+$permissions = enum_value($permissions);
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:493:        if 
+(is_int($permissions) || PermissionRegistrar::isUid($permissions)) {
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:494:            
+return $this->getPermissionClass()::findById($permissions, 
+$this->getDefaultGuardName());
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:497:        if 
+(is_string($permissions)) {
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:498:            
+return $this->getPermissionClass()::findByName($permissions, 
+$this->getDefaultGuardName());
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:501:        if 
+(is_array($permissions)) {
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:502:            
+$permissions = array_map(fn ($permission) => $permission instanceof Permission 
+? $permission->name : enum_value($permission), $permissions);
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:504:            
+return $this->getPermissionClass()::whereIn('name', $permissions)
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:509:        
+return $permissions;
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:513:     * 
+@param  Permission|Role  $roleOrPermission
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:517:    
+protected function ensureModelSharesGuard($roleOrPermission): void
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:519:        if 
+(! $this->getGuardNames()->contains($roleOrPermission->guard_name)) {
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:520:            
+throw GuardDoesNotMatch::create($roleOrPermission->guard_name, 
+$this->getGuardNames());
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:535:     * 
+Forget the cached permissions.
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:537:    public 
+function forgetCachedPermissions(): void
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:539:        
+app(PermissionRegistrar::class)->forgetCachedPermissions();
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:543:     * 
+Check if the model has All of the requested Direct permissions.
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:545:     * 
+@param  string|int|array|Permission|Collection|BackedEnum  ...$permissions
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:547:    public 
+function hasAllDirectPermissions(...$permissions): bool
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:549:        
+$permissions = collect($permissions)->flatten();
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:551:        
+foreach ($permissions as $permission) {
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:552:            
+if (! $this->hasDirectPermission($permission)) {
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:561:     * 
+Check if the model has Any of the requested Direct permissions.
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:563:     * 
+@param  string|int|array|Permission|Collection|BackedEnum  ...$permissions
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:565:    public 
+function hasAnyDirectPermission(...$permissions): bool
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:567:        
+$permissions = collect($permissions)->flatten();
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:569:        
+foreach ($permissions as $permission) {
+vendor\spatie\laravel-permission\src\Traits\HasPermissions.php:570:            
+if ($this->hasDirectPermission($permission)) {
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:3:namespace 
+Spatie\Permission\Traits;
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:10:use 
+Spatie\Permission\Contracts\Permission;
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:11:use 
+Spatie\Permission\Contracts\Role;
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:12:use 
+Spatie\Permission\Events\RoleAttachedEvent;
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:13:use 
+Spatie\Permission\Events\RoleDetachedEvent;
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:14:use 
+Spatie\Permission\PermissionRegistrar;
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:21:    use 
+HasPermissions;
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:32:            $teams 
+= app(PermissionRegistrar::class)->teams;
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:33:            
+app(PermissionRegistrar::class)->teams = false;
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:35:            if 
+($model instanceof Permission) {
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:38:            
+app(PermissionRegistrar::class)->teams = $teams;
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:45:            
+$this->roleClass = app(PermissionRegistrar::class)->getRoleClass();
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:57:            
+config('permission.models.role'),
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:59:            
+config('permission.table_names.model_has_roles'),
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:60:            
+config('permission.column_names.model_morph_key'),
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:61:            
+app(PermissionRegistrar::class)->pivotRole
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:64:        if (! 
+app(PermissionRegistrar::class)->teams) {
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:68:        $teamsKey 
+= app(PermissionRegistrar::class)->teamsKey;
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:70:        $teamField 
+= config('permission.table_names.roles').'.'.$teamsKey;
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:72:        return 
+$relation->wherePivot($teamsKey, getPermissionsTeamId())
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:73:            
+->where(fn ($q) => $q->whereNull($teamField)->orWhere($teamField, 
+getPermissionsTeamId()));
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:94:            
+$method = is_int($role) || PermissionRegistrar::isUid($role) ? 'findById' : 
+'findByName';
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:102:            
+->whereIn(config('permission.table_names.roles').".$key", array_column($roles, 
+$key))
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:152:        
+$teamPivot = app(PermissionRegistrar::class)->teams && ! $this instanceof 
+Permission ?
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:153:            
+[app(PermissionRegistrar::class)->teamsKey => getPermissionsTeamId()] : [];
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:156:            if 
+(app(PermissionRegistrar::class)->teams) {
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:181:        if ($this 
+instanceof Permission) {
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:182:            
+$this->forgetCachedPermissions();
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:185:        
+$this->forgetWildcardPermissionIndex();
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:187:        if 
+(config('permission.events_enabled')) {
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:208:        if ($this 
+instanceof Permission) {
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:209:            
+$this->forgetCachedPermissions();
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:212:        
+$this->forgetWildcardPermissionIndex();
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:214:        if 
+(config('permission.events_enabled')) {
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:231:            if 
+(config('permission.events_enabled')) {
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:267:        if 
+(is_int($roles) || PermissionRegistrar::isUid($roles)) {
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:376:     * Return all 
+permissions directly coupled to the model.
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:378:    public 
+function getDirectPermissions(): Collection
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:380:        return 
+$this->permissions;
+vendor\spatie\laravel-permission\src\Traits\HasRoles.php:394:        if 
+(is_int($role) || PermissionRegistrar::isUid($role)) {
+vendor\spatie\laravel-permission\src\Traits\RefreshesPermissionCache.php:3:name
+space Spatie\Permission\Traits;
+vendor\spatie\laravel-permission\src\Traits\RefreshesPermissionCache.php:5:use 
+Spatie\Permission\PermissionRegistrar;
+vendor\spatie\laravel-permission\src\Traits\RefreshesPermissionCache.php:7:trai
+t RefreshesPermissionCache
+vendor\spatie\laravel-permission\src\Traits\RefreshesPermissionCache.php:9:    
+public static function bootRefreshesPermissionCache()
+vendor\spatie\laravel-permission\src\Traits\RefreshesPermissionCache.php:12:   
+         app(PermissionRegistrar::class)->forgetCachedPermissions();
+vendor\spatie\laravel-permission\src\Traits\RefreshesPermissionCache.php:16:   
+         app(PermissionRegistrar::class)->forgetCachedPermissions();
+vendor\symfony\finder\Finder.php:543:     * This is the time that the inode 
+information was last modified (permissions, owner, group or other metadata).
+
+
