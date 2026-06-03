@@ -12,10 +12,10 @@ class PropertyImageController extends Controller
 
     public function __construct()
     {
-         $this->middleware('permission:image-list|image-create|image-edit|image-delete', ['only' => ['index','show']]);
-         $this->middleware('permission:image-create', ['only' => ['create','store']]);
-         $this->middleware('permission:image-edit', ['only' => ['edit','update']]);
-         $this->middleware('permission:image-delete', ['only' => ['destroy']]);
+         $this->middleware('permission:Property image list|Property image create|Property image edit|Property image delete', ['only' => ['index','show']]);
+         $this->middleware('permission:Property image create', ['only' => ['create','store']]);
+         $this->middleware('permission:Property image edit', ['only' => ['edit','update']]);
+         $this->middleware('permission:Property image delete', ['only' => ['destroy']]);
     }
 
     /**
