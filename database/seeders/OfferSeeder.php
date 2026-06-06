@@ -18,7 +18,7 @@ class OfferSeeder extends Seeder
         foreach (range(1, 10) as $index) {
             $property = $properties->random();
             
-            // توليد سعر عرض وهمي (أقل أو أكثر من سعر العقار بـ 10%)
+            
             $variation = $property->price * 0.1;
             $offeredPrice = $property->price + rand(-$variation, $variation);
 
@@ -28,7 +28,7 @@ class OfferSeeder extends Seeder
                 'agent_id'      => $agentIds[array_rand($agentIds)],
                 'offered_price' => $offeredPrice,
                 'status'        => ['pending', 'accepted', 'rejected', 'cancelled'][rand(0, 3)],
-                'notes'         => 'تفاوض على السعر من قبل العميل رقم ' . $index,
+                'notes'         => 'the offer ' . $index,
             ]);
         }
     }

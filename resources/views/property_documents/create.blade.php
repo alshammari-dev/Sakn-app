@@ -40,7 +40,7 @@
                 <div class="col-md-6 mx-auto">
                     <input type="file" class="form-control" name="file" required accept=".pdf,image/*">
                 </div>
-                <small class="text-muted mt-2 d-block">Allowed: PDF, JPG, PNG (Max: 5MB)</small>
+                <small class="text-muted mt-2 d-block">Allowed: PDF, JPG, PNG (Max: 50MB)</small>
             </div>
         </div>
     </x-sakn-form-page>

@@ -12,7 +12,7 @@ class VisitSeeder extends Seeder
 {
     public function run()
     {
-        // جلب المعرفات (IDs) المتاحة لضمان الربط الصحيح
+        
         $propertyIds = Property::pluck('id')->toArray();
         $agentIds = User::role('sale-agent')->pluck('id')->toArray();
         $clientIds = User::role('client')->pluck('id')->toArray();
@@ -24,7 +24,7 @@ class VisitSeeder extends Seeder
                 'agent_id'     => $agentIds[array_rand($agentIds)],
                 'scheduled_at' => Carbon::now()->addDays(rand(1, 10))->addHours(rand(1, 12)),
                 'status'       => ['pending', 'approved', 'completed', 'cancelled'][rand(0, 3)],
-                'notes'        => 'ملاحظة وهمية لطلب الزيارة رقم ' . $index,
+                'notes'        => 'Fake message for the visit ' . $index,
             ]);
         }
     }

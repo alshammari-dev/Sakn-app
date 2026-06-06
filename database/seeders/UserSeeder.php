@@ -15,21 +15,21 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         $faker = Faker::create();
-        $password = Hash::make('12341234'); // كلمة المرور الموحدة
+        $password = Hash::make('12341234'); 
 
-        // --- إنشاء 5 وكلاء مبيعات (Sales Agents) ---
+        // ---   Create 5  (Sales Agents) ---
         foreach (range(1, 5) as $index) {
             $agent = User::create([
                 'name' => $faker->name,
-                'email' => "agent{$index}@test.com", // بريد إلكتروني تسلسلي لسهولة الحفظ
+                'email' => "agent{$index}@test.com", 
                 'password' => $password,
             ]);
             
-            // تعيين دور الوكيل (تأكد من مطابقة الاسم لما هو موجود في قاعدة بياناتك)
+            
             $agent->assignRole('sale-agent'); 
         }
 
-        // --- إنشاء 10 عملاء (Clients) ---
+        // ---  Create 10  (Clients) ---
         foreach (range(1, 10) as $index) {
             $client = User::create([
                 'name' => $faker->name,
@@ -37,7 +37,7 @@ class UserSeeder extends Seeder
                 'password' => $password,
             ]);
             
-            // تعيين دور العميل
+            
             $client->assignRole('client');
         }
     }

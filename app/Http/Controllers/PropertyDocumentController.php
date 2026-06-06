@@ -11,10 +11,10 @@ class PropertyDocumentController extends Controller
 {
      public function __construct()
     {
-         $this->middleware('permission:document-list|document-create|document-edit|document-delete', ['only' => ['index','show']]);
-         $this->middleware('permission:document-create', ['only' => ['create','store']]);
-         $this->middleware('permission:document-edit', ['only' => ['edit','update']]);
-         $this->middleware('permission:document-delete', ['only' => ['destroy']]);
+         $this->middleware('permission:property-document-list|property-document-create|property-document-edit|property-document-delete', ['only' => ['index','show']]);
+         $this->middleware('permission:property-document-create', ['only' => ['create','store']]);
+         $this->middleware('permission:property-document-edit', ['only' => ['edit','update']]);
+         $this->middleware('permission:property-document-delete', ['only' => ['destroy']]);
     }
     
     /**
@@ -48,7 +48,7 @@ class PropertyDocumentController extends Controller
         $validated = $request->validate([
             'property_id' => 'required|exists:properties,id',
             'doc_type'    => 'required|in:ownership_deed,floor_plan,other',
-            'file'        => 'required|file|mimes:pdf,jpeg,png,jpg|max:5120',
+            'file'        => 'required|file|mimes:pdf,jpeg,png,jpg|max:51200',
             'is_private'  => 'required|boolean',
         ]);
 
